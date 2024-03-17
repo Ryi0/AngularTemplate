@@ -1,0 +1,87 @@
+:root{
+  background-color: #1a1a1a;
+}
+// Colors
+$primary-color: #20639B;
+$secondary-color: #17202A;
+
+// Fonts
+$font-family-primary: 'Arial', sans-serif;
+$font-family-secondary: 'Georgia', serif;
+
+// Spacing
+$spacing-small: 10px;
+$spacing-medium: 20px;
+$spacing-large: 30px;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+//\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Responsive Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
+
+@mixin respond-to($media) {
+  @if $media == mobile {
+    @media (max-width: $breakpoint-mobile) {
+      @content;
+    }
+  } @else if $media == tablet {
+    @media (max-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $media == desktop {
+    @media (max-width: $breakpoint-desktop) {
+      @content;
+    }
+  }
+}
+
+//\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Common Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
+
+@mixin button-styles($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin card-styles($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: 1px solid darken($bg-color, 15%);
+}
+
+//\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<Theming Functions>\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
+
+@function set-theme($primary, $secondary, $text-color) {
+  $theme: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "text-color": $text-color
+  );
+  @return $theme;
+}
+
+$light-theme: set-theme(#fff, #f7f7f7, #333);
+$dark-theme: set-theme(#333, #1a1a1a, #fff);
+
+//====================================================================<Base styles>=================================================================
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Typography
+body {
+  font-family: $font-family-primary;
+  color: $primary-color;
+}
+
+// Utility classes
+.text-center {
+  text-align: center;
+}
