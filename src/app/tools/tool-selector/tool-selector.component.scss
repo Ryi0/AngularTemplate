@@ -1,13 +1,13 @@
 //app-tool-selector
 @use "../../../styles" as *;
 // Tool selector colors
-$tool-bg-color: rgba(0, 0, 0, 0.7);
-$tool-hover-color: #646464;
-$tool-border-color: $primary-color;  // from global styles.scss
+$tool-bg-color: $chosenSecondary-color;
+$tool-hover-color: $chosenPrimary-color;
+$tool-border-color: $chosenPrimary-color;  // from global styles.scss
 $tool-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-$tool-transition: all 0.3s ease;
+$tool-transition: all 0.3s ease-out;
 
-@mixin tool-box {
+@mixin tool {
   background: $tool-bg-color;
   border: 2px solid $tool-border-color;
   box-shadow: $tool-shadow;
@@ -21,14 +21,18 @@ $tool-transition: all 0.3s ease;
   }
 }
 
-
+:host{
+  //$title:attr(data-title);
+  //@include bordered-container("TASD");
+  width: 100%;
+}
 .tool-selector {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: $spacing-medium;  // from global styles.scss
   .tool-item {
-    @include tool-box;
-    @include tool-hover;
+    @include tool;
+    @include hover-effect();
     height: 100px; // Or any needed value
     display: flex;
     justify-content: center;

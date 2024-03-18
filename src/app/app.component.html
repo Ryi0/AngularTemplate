@@ -1,4 +1,10 @@
-<app-tool-selector></app-tool-selector>
 
+<div appBordered myTitle="App Component">
+  <div appRouteOnClick route="home">
+    <h1>Go back</h1>
+  </div>
+  <main id="appMain">
+    <router-outlet />
+</main>
+</div>
 
-<router-outlet />

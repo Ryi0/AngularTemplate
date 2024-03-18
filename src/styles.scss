@@ -1,9 +1,17 @@
-:root{
-  background-color: #1a1a1a;
-}
+
+
 // Colors
-$primary-color: #20639B;
-$secondary-color: #17202A;
+$lightPrimary-color: #32586e;
+$lightSecondary-color: #e4eeec;
+
+
+$darkPrimary-color: #20639B;
+$darkSecondary-color: #17202A;
+$darkBackground-color: #252628;
+$lightBackground-color: #fffdf3;
+$darkColor-color:$lightBackground-color;
+$lightColor-color:$darkBackground-color;
+
 
 // Fonts
 $font-family-primary: 'Arial', sans-serif;
@@ -18,6 +26,12 @@ $spacing-large: 30px;
 $breakpoint-mobile: 480px;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 1024px;
+
+//$chosenPrimary-color: #20639B;
+//$chosenSecondary-color: #17202A;
+//$chosenBackgroundColor:$lightBackground-color;
+//$chosenFont-color:$lightColor-color;
+
 
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Responsive Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
 
@@ -38,6 +52,22 @@ $breakpoint-desktop: 1024px;
 }
 
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Common Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
+@mixin bordered-container($border-color: $chosenPrimary-color, $title-color: $chosenSecondary-color, $bg-color: transparent) {
+  position: relative;
+  padding: $spacing-medium;
+  border: 2px solid $border-color;
+  background-color: $bg-color;
+
+  &:before {
+    content: attr(data-title);
+    position: absolute;
+    top: -0.5em;
+    left: $spacing-small;
+    background: $chosenBackgroundColor;
+    color: $border-color;
+    padding: 0 $spacing-small;
+  }
+}
 
 @mixin button-styles($bg-color, $text-color) {
   background-color: $bg-color;
@@ -52,6 +82,35 @@ $breakpoint-desktop: 1024px;
   border: 1px solid darken($bg-color, 15%);
 }
 
+
+
+@mixin hover-effect($hover-bg-color: $chosenPrimary-color, $hover-txt-color: $chosenBackgroundColor, $transition: 0.3s ease) {
+  transition: $transition;
+
+  &:hover {
+    background-color: $hover-bg-color;
+    color: $hover-txt-color;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    transform: translateY(-2px) scale(1.09); // gives a lifting effect
+  }
+
+  &:active {
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.44);
+    transform: translateY(1px) scale(1.03); // gives a pressing effect
+
+  }
+}
+
+// Usage example
+
+//.button {
+//  @include button-styles($chosenPrimary-color, $lightBackground-color);
+//  @include hover-effect($chosenSecondary-color, $darkBackground-color); // If you don't pass any argument, it will use the default colors
+//  padding: 1rem 2rem;
+//  border-radius: 0.5rem;
+//  display: inline-block;
+//}
+
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<Theming Functions>\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
 
 @function set-theme($primary, $secondary, $text-color) {
@@ -62,10 +121,20 @@ $breakpoint-desktop: 1024px;
   );
   @return $theme;
 }
+$is-dark-theme: false;
+@function SIMPLE_set-theme($boolean){
+  $is-dark-theme:$boolean;
+}
 
 $light-theme: set-theme(#fff, #f7f7f7, #333);
 $dark-theme: set-theme(#333, #1a1a1a, #fff);
 
+
+
+$chosenPrimary-color: if($is-dark-theme, $darkPrimary-color, $lightPrimary-color);
+$chosenSecondary-color: if($is-dark-theme, $darkSecondary-color, $lightSecondary-color);
+$chosenBackgroundColor: if($is-dark-theme, $darkBackground-color, $lightBackground-color);
+$chosenFont-color: if($is-dark-theme, $darkColor-color, $lightColor-color);
 //====================================================================<Base styles>=================================================================
 
 // Reset
@@ -77,11 +146,21 @@ $dark-theme: set-theme(#333, #1a1a1a, #fff);
 
 // Typography
 body {
+  text-align: -webkit-center;
   font-family: $font-family-primary;
-  color: $primary-color;
+  color: $chosenPrimary-color;
+  padding: 10vh 2rem 2rem;
+  background-color: $chosenBackgroundColor;
+
 }
 
 // Utility classes
 .text-center {
   text-align: center;
+}
+//\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/< Global classes for divs >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
+
+.custBordered{
+  margin-top: 1vh;
+  @include bordered-container;
 }
