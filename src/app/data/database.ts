@@ -40,8 +40,10 @@ export class Database {
   }
 
   public add(object: InterfaceObject) {
+    console.log("GOGOASD")
     this._ObjList.push(object);
     this.updateObjectCountSignal();
+    console.log(this._ObjList)
   }
 
 

@@ -5,7 +5,7 @@
 }
 
 .typesGrid{
-  @include responsive-grid(5em, 10em, 1em, 1em); // If you don't pass any argument, it will use the default values
+  @include responsive-grid(5em, 10em, auto, auto); // If you don't pass any argument, it will use the default values
   height: 100%;
   .tile {
   display: flex;
@@ -18,4 +18,37 @@
     //padding: $spacing-small;
     text-align: center;
   }
+  padding-bottom: 1ch;
+}
+
+.dataGrid{
+  @include responsive-grid(10em, 15em, 10em, .25ch);
+
+  justify-content: space-evenly;
+  overflow: auto;
+}
+.heightMax{
+  //overflow: auto; // Change this to auto to hide scrollbar when not needed
+  min-height: 40%; // This allows the scrollbar to respect the size of the parent
+  flex: 0; // This will allow the item to grow and shrink
+}
+.gridContainer{
+  overflow: scroll; // Change this to auto to hide scrollbar when not needed
+  max-height: 100%; // This allows the scrollbar to respect the size of the parent
+  flex: 0; // This will allow the item to grow and shrink
+}
+.objTile{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
+  width: 100%;
+  height: 100%;
+  background-color: $chosenSecondary-color;
+  color: $chosenPrimary-color;
+  //padding: $spacing-small;
+  text-align: center;
 }

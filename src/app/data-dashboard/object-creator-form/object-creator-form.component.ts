@@ -50,7 +50,7 @@ export class ObjectCreatorFormComponent {
     if (this.type===ObjectTypes.ElectricEngine || this.type=== ObjectTypes.GasEngine){
       const newObj = this.of.createObject(this.type, <string>this.myForm.value.name, this.myForm.value.attribute);
 
-    this.of.setRpm(newObj,50);
+    this.of.setRpm(newObj, Number(this.myForm.value.rpm));
       console.log(newObj);
       ToolsService.Db.add(newObj);
     }
@@ -58,6 +58,7 @@ export class ObjectCreatorFormComponent {
     else {
      const newObj = this.of.createObject(this.type, <string>this.myForm.value.name, this.myForm.value.attribute);
       console.log(newObj);
+      ToolsService.Db.add(newObj);
   }
   }
 

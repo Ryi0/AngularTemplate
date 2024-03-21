@@ -1,5 +1,6 @@
 import {InterfaceObject} from "./i-object";
 import {ObjectTypes} from "./object-types";
+import {Engine} from "./engine";
 
 abstract class furniture implements InterfaceObject{
     id: number;
@@ -16,29 +17,7 @@ abstract class furniture implements InterfaceObject{
 
 }
 
- abstract class Engine implements InterfaceObject{
-  get maxRpm(): number {
-    return this._maxRpm;
-  }
 
-  set maxRpm(value: number) {
-    if (value<=0){
-      throw new Error("Max RPM is less than 0");
-    }
-    this._maxRpm = value;
-  }
-    id: number;
-    name: string;
-    attribute: any;
-    private _maxRpm:number;
-    protected constructor(id: number, name: string, attribute: any, maxRpm:number) {
-      this.id = id;
-      this.name = name;
-      this.attribute = attribute;
-      this._maxRpm = maxRpm;
-    }
-
-}
 
 class ElectricEngine extends Engine{
 
