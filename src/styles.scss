@@ -82,6 +82,16 @@ $breakpoint-desktop: 1024px;
   border: 1px solid darken($bg-color, 15%);
 }
 
+@mixin responsive-grid($min-width: 5em, $max-width: 10em, $height: 1em, $gutter: 1em) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, $max-width));
+  //grid-auto-rows: $height;
+  //grid-gap: $gutter;
+
+  @media (max-width: $breakpoint-tablet) {
+    grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  }
+}
 
 
 @mixin hover-effect($hover-bg-color: $chosenPrimary-color, $hover-txt-color: $chosenBackgroundColor, $transition: 0.3s ease) {
@@ -210,4 +220,15 @@ input{
   background-color: transparent;
   border: none;
   outline: none;
+}
+.flex{
+  display: flex;
+}
+.AlignStartRev{
+  align-items: flex-start;
+  flex-direction: column-reverse;
+}
+.allFit{
+  height: fit-content;
+  width: fit-content;
 }
