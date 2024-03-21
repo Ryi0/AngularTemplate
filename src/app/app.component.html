@@ -1,7 +1,13 @@
-
-<div appBordered myTitle="App Component">
+<header>
+  <div class="actionButton" appRouteOnClick route="dashboard">
+  <h1>Dashboard</h1>
+  </div>
+</header>
+<div class="mainDivWrap" appBordered myTitle="App Component">
   <div appRouteOnClick route="home">
+<div class="actionButton">
     <h1>Go back</h1>
+</div>
   </div>
   <main id="appMain">
     <router-outlet />

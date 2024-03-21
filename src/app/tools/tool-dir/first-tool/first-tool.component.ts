@@ -8,9 +8,9 @@ import {BorderedDirective} from "../../../directives/bordered.directive";
     BorderedDirective
   ],
   template: `
-    <div appBordered [myTitle]="ToolName">
+    <div appBordered [myTitle]="ToolName" class="divSize5">
         <h1>Cool tool number one</h1>
-    </div>
+        </div>
   `,
   styleUrl: './first-tool.component.scss'
 })

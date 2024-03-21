@@ -1,4 +1,6 @@
 export enum ObjectTypes {
   Chair = "Chair",
-  Table = "Table"
+  Table = "Table",
+  GasEngine = "GasEngine",
+  ElectricEngine = "ElectricEngine",
 }

@@ -1,3 +1,4 @@
+@use "../styles" as *;
 #appMain{
   display: flex;
   flex-direction: column;
@@ -11,9 +12,26 @@
   height: 70vh;
   padding:0 5%;
 
-
-
  // background-color: #1a1a1a;
+}
+.mainDivWrap{
+  //margin-top: 10vh ;
+}
+
+.actionButton{
+  @include hover-effect();
+  width: fit-content;
+  padding: .2rem;
+}
+
+header{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  margin-top: 2vh;
+  //height: 10vh;
+  width: 100%;
 }
 
 //.bordered {
