@@ -16,21 +16,32 @@ abstract class furniture implements InterfaceObject{
 
 }
 
-abstract class Engine implements InterfaceObject{
+ abstract class Engine implements InterfaceObject{
+  get maxRpm(): number {
+    return this._maxRpm;
+  }
+
+  set maxRpm(value: number) {
+    if (value<=0){
+      throw new Error("Max RPM is less than 0");
+    }
+    this._maxRpm = value;
+  }
     id: number;
     name: string;
     attribute: any;
-    private maxRpm:number;
+    private _maxRpm:number;
     protected constructor(id: number, name: string, attribute: any, maxRpm:number) {
       this.id = id;
       this.name = name;
       this.attribute = attribute;
-      this.maxRpm = maxRpm;
+      this._maxRpm = maxRpm;
     }
 
 }
 
 class ElectricEngine extends Engine{
+
   constructor(id: number, name: string, attribute: any, maxRpm:number) {
     super(id, name, attribute, maxRpm);
   }
@@ -55,8 +66,9 @@ class Table extends furniture {
 }
 
 export class ObjectFactory {
-    static id:number = 0
-    static createObject(type:ObjectTypes, name: string, attribute: any) {
+    static id:number = 0;
+
+    public static createObject(type:ObjectTypes, name: string, attribute: any) {
       ObjectFactory.id++;
       if (type === 'Chair') {
         return new Chair(ObjectFactory.id, name, attribute);
@@ -73,7 +85,15 @@ export class ObjectFactory {
       else {
         ObjectFactory.id--;
         throw new Error('Invalid type');
-
+      }
+    }
+    public static setRpm(engine: any|Engine, maxRpm: number) {
+      if (!(engine instanceof Engine)) {
+        throw new Error(`${engine}: is not a valid engine`);
+      }
+      else {
+        engine.maxRpm = maxRpm;
       }
     }
 }
+
