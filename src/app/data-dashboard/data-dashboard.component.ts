@@ -5,6 +5,7 @@ import {RouteOnClickDirective} from "../directives/route-on-click.directive";
 import {ObjectCreatorFormComponent} from "./object-creator-form/object-creator-form.component";
 import {ObjectTypes} from "../data/object-types";
 import {ToolsService} from "../../tools.service";
+import {OTypeComponent} from "./otype/otype.component";
 
 @Component({
   selector: 'app-data-dashboard',
@@ -14,13 +15,15 @@ import {ToolsService} from "../../tools.service";
     NgForOf,
     RouteOnClickDirective,
     ObjectCreatorFormComponent,
-    NgIf
+    NgIf,
+    OTypeComponent
   ],
   template: `
 
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
       <div appBordered myTitle="Database" class="divSize5 heightMax">
         <div class="gridContainer">
+
           <div class="dataGrid">
             <ng-container *ngFor="let obj of ToolsService.Db.ObjList">
               <div class="objTile">
@@ -35,14 +38,15 @@ import {ToolsService} from "../../tools.service";
           </div>
         </div>
       </div>
-      <div class="divSize3">
+      <div class="divSize1 flex" style="flex-direction: column; width: 100%; height: 15% " >
+<!--        <h2>Selected Type : {{selectedType()}}</h2>-->
+      <div class="divSize5">
         <div class="typesGrid">
-          <ng-container *ngFor="let type of ToolsService.Db.GetAllObjectTypes()">
-            <div class="tile" (click)="SetSelectedType(type)">
-              {{ type }}
-            </div>
+          <ng-container *ngFor="let type of ToolsService.Db.GetAllObjectTypes() index as i ">
+              <app-otype (click)="TypeClickHandler(type, i)" [isSelected]="selectedFlagsArray[i]" [name]="type"></app-otype>
           </ng-container>
         </div>
+      </div>
       </div>
       <app-object-creator-form [type]="selectedType()"></app-object-creator-form>
 
@@ -53,6 +57,16 @@ import {ToolsService} from "../../tools.service";
 })
 export class DataDashboardComponent {
   selectedType  = signal<ObjectTypes>(ObjectTypes.Chair);
+  selectedFlagsArray:boolean[] =  Array(ToolsService.Db.GetAllObjectTypes().length).fill(false)
+  TypeClickHandler(type:ObjectTypes, index:number ){
+    this.selectedFlagsArray.fill(false);
+    this.selectedFlagsArray[index] = true;
+    this.SetSelectedType(type);
+  }
+  SetFlag(index:number){
+    this.selectedFlagsArray[index] = true;
+  }
+
   logTools(){
     console.log(ToolsService.Db.ObjectCountSignal())
     console.log(ToolsService.Db.ObjList);
@@ -65,6 +79,7 @@ export class DataDashboardComponent {
     console.log(this.selectedType());
     console.log(ToolsService.Db.ObjList)
   }
+
 
 
   protected readonly ToolsService = ToolsService;

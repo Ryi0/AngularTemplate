@@ -14,7 +14,7 @@ export class ToolsService {
   }
 
   static IsEngine(obj:InterfaceObject):boolean {
-    return ToolsService.getTypeOfObject(obj) == ObjectTypes.ElectricEngine || ToolsService.getTypeOfObject(obj) == ObjectTypes.GasEngine;
+    return obj instanceof Engine;
   }
   static GetRpm(obj: InterfaceObject) {
     if (ToolsService.IsEngine(obj)) {
