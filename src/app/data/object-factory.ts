@@ -70,17 +70,19 @@ export class ObjectFactory {
         throw new Error('Invalid type');
       }
       })
-      // const ReturnObject = createdObject();
-      const ReturnObject = this.setType(createdObject());
+      const ReturnObject = createdObject();
+      this.setType(ReturnObject)
+      // const ReturnObject = this.setType(createdObject());
 
       console.log(ReturnObject)
       return ReturnObject;
     }
 
     public static setType(obj:InterfaceObject){
-     const o = obj;
-      o.type = ToolsService.getTypeOfObject(obj);
-      return o;
+     // const o = obj;
+     //  o.type = ToolsService.getTypeOfObject(obj);
+     //  return o;
+      obj.type = ToolsService.getTypeOfObject(obj)
     }
 
     public static setRpm(engine:InterfaceObject, maxRpm: number) {
