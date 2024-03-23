@@ -1,6 +1,9 @@
 import {InterfaceObject} from "./i-object";
 import {computed, signal} from "@angular/core";
 import {ObjectTypes} from "./object-types";
+import {ObjectFactory} from "./object-factory";
+import {ToolsService} from "../../tools.service";
+import {Engine} from "./engine";
 
 export class Database {
 
@@ -11,7 +14,8 @@ export class Database {
   set ObjList(value: Array<InterfaceObject>) {
     this._ObjList = value;
   }
-
+  public displayData:InterfaceObject[] = [];
+  public serverData: any[] | any;
   private _ObjList: Array<InterfaceObject> = [];
   ObjectCountSignal = signal(0);
 
@@ -45,9 +49,34 @@ export class Database {
     this.updateObjectCountSignal();
     console.log(this._ObjList)
   }
+  public parseServerData(){
+    const parsedData: InterfaceObject[] = [];
+    this.serverData.forEach((value:object) =>{
+      let tmpVal = <InterfaceObject>value;
+      const type = tmpVal.type
+      if (type!=undefined){
+       const typedObj = ObjectFactory.createObject(ObjectTypes[<ObjectTypes>type], tmpVal.name, tmpVal.attribute);
+        if (ToolsService.IsEngine(typedObj)) {
+          const tmpEng = <Engine>value;
+          console.log(this.GetMaxRpm(tmpVal));
+          ObjectFactory.setRpm(typedObj, this.GetMaxRpm(tmpVal));
+        }
+        // console.log((<Engine>typedObj).maxRpm)
+        parsedData.push( typedObj);
+      }
 
-
-
+      // console.log((<Engine>value).maxRpm)
+    })
+    this.displayData = parsedData;
+    console.log(this.displayData)
+  }
+  public GetMaxRpm(engine:InterfaceObject){
+    let rpm= Object.entries(engine).find(value => value[0]==="_maxRpm");
+    if(rpm!=undefined){
+      return <number>rpm[1]
+    }
+    return 0;
+  }
   public remove(object: InterfaceObject) {
     const index = this._ObjList.indexOf(object);
     if (index > -1) {

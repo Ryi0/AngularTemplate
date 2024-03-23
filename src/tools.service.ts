@@ -10,6 +10,7 @@ import {Engine} from "./app/data/engine";
 export class ToolsService {
   static Db = new Database([]);
   static getTypeOfObject = (obj:InterfaceObject): any => {
+
     return Object.getPrototypeOf(obj).constructor.name;
   }
 

@@ -5,6 +5,7 @@ import {ObjectFactory} from "../../data/object-factory";
 import {BorderedDirective} from "../../directives/bordered.directive";
 import {ToolsService} from "../../../tools.service";
 import {NgIf} from "@angular/common";
+import {Engine} from "../../data/engine";
 
 @Component({
   selector: 'app-object-creator-form',
@@ -50,7 +51,8 @@ export class ObjectCreatorFormComponent {
     if (this.type===ObjectTypes.ElectricEngine || this.type=== ObjectTypes.GasEngine){
       const newObj = this.of.createObject(this.type, <string>this.myForm.value.name, this.myForm.value.attribute);
 
-    this.of.setRpm(newObj, Number(this.myForm.value.rpm));
+      this.of.setRpm(newObj, Number(this.myForm.value.rpm));
+      console.log((<Engine>newObj).maxRpm)
       console.log(newObj);
       ToolsService.Db.add(newObj);
     }

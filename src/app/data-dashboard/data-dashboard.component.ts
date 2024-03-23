@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, WritableSignal, signal} from '@angular/core';
 import {BorderedDirective} from "../directives/bordered.directive";
 import {NgForOf, NgIf} from "@angular/common";
 import {RouteOnClickDirective} from "../directives/route-on-click.directive";
@@ -8,7 +8,7 @@ import {ToolsService} from "../../tools.service";
 import {OTypeComponent} from "./otype/otype.component";
 import {DataServingService} from "../data-serving.service";
 import {HttpClientModule} from "@angular/common/http";
-import {AppComponent} from "../app.component";
+import {InterfaceObject} from "../data/i-object";
 
 @Component({
   selector: 'app-data-dashboard',
@@ -25,13 +25,14 @@ import {AppComponent} from "../app.component";
   template: `
     <button (click)="dataHandler()">Test Data Serving</button>
     <button (click)="deleteAllClickHandler()">\\ ! / Delete all \\ ! /</button>
+    <button (click)="logDbData()">Log db data</button>
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
       <div appBordered myTitle="Database" class="divSize5 heightMax">
         <div class="gridContainer">
 
           <div class="dataGrid">
-            <ng-container *ngFor="let obj of ToolsService.Db.ObjList">
-              <div class="objTile">
+            <ng-container *ngFor="let obj of ToolsService.Db.displayData">
+              <div (click)="DbItemClickHandler(obj)" class="objTile">
                 <h2>{{ToolsService.getTypeOfObject(obj)}}</h2>
                 <h3>Name : {{ obj.name }} </h3>
                 <p>Id : {{ obj.id }}</p>
@@ -54,14 +55,16 @@ import {AppComponent} from "../app.component";
       </div>
       </div>
       <app-object-creator-form [type]="selectedType()"></app-object-creator-form>
-
+    <div>Selected ID(s) : {{selectedIdList()}} </div>
     </div>
 
   `,
   styleUrl: './data-dashboard.component.scss'
 })
 export class DataDashboardComponent {
-  // const serv = new DataServingService()
+  name =  "Data Dashboard";
+  selectedIdList: WritableSignal<string> = signal("");
+  selectedItemList:InterfaceObject[] = [];
   constructor(private dataService: DataServingService) { }
   dataHandler(){
     console.log("btn pressed")
@@ -69,11 +72,16 @@ export class DataDashboardComponent {
       console.log(res)
     });
   }
+  logDbData(){
+    this.dataService.GETRequestDataToolService().subscribe(value => {
+      ToolsService.Db.serverData = value;
+      ToolsService.Db.parseServerData();
+      console.log(ToolsService.Db.serverData)
+    });
+  }
   deleteAllClickHandler(){
     console.log('DataToBeDeleted');
-    this.dataService.deleteToolServiceData().subscribe(res=>{
-      console.log(res)
-    })
+    this.dataService.deleteToolServiceData().subscribe()
   }
   selectedType  = signal<ObjectTypes>(ObjectTypes.Chair);
   selectedFlagsArray:boolean[] =  Array(ToolsService.Db.GetAllObjectTypes().length).fill(false)
@@ -82,16 +90,20 @@ export class DataDashboardComponent {
     this.selectedFlagsArray[index] = true;
     this.SetSelectedType(type);
   }
-  // SetFlag(index:number){
-  //   this.selectedFlagsArray[index] = true;
-  // }
 
-  // logTools(){
-  //   console.log(ToolsService.Db.ObjectCountSignal())
-  //   console.log(ToolsService.Db.ObjList);
-  // }
-  name =  "Data Dashboard";
-  // tmpType:ObjectTypes = ObjectTypes.GasEngine
+  DbItemClickHandler(Item:InterfaceObject){
+    const id = Item.id;
+    this.dataService.GETRequestDataToolById(id).subscribe(value => {
+      console.log(value);
+      this.selectedItemList.push((<InterfaceObject>value));
+      console.log(this.selectedItemList);
+      this.selectedIdList.update(value1 => {
+       return value1 + " "+(<InterfaceObject>value).id
+      })
+    });
+  }
+
+
 
   SetSelectedType(type:ObjectTypes){
     this.selectedType.set(type);

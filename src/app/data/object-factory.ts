@@ -74,23 +74,23 @@ export class ObjectFactory {
       this.setType(ReturnObject)
       // const ReturnObject = this.setType(createdObject());
 
-      console.log(ReturnObject)
+      // console.log(ReturnObject)
       return ReturnObject;
     }
 
     public static setType(obj:InterfaceObject){
-     // const o = obj;
-     //  o.type = ToolsService.getTypeOfObject(obj);
-     //  return o;
+
       obj.type = ToolsService.getTypeOfObject(obj)
     }
 
     public static setRpm(engine:InterfaceObject, maxRpm: number) {
+
       if (!(engine instanceof Engine)) {
         throw new Error(`${engine}: is not a valid engine`);
       }
       else {
         engine.maxRpm = maxRpm;
+        // console.log(engine.maxRpm)
       }
     }
 }

@@ -22,4 +22,5 @@ export abstract class Engine implements InterfaceObject{
     this._maxRpm = maxRpm;
   }
 
+
 }
