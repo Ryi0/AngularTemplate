@@ -60,6 +60,7 @@ export class ObjectCreatorFormComponent {
       console.log(newObj);
       ToolsService.Db.add(newObj);
   }
+
   }
 
   protected readonly ObjectTypes = ObjectTypes;

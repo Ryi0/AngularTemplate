@@ -14,6 +14,7 @@ import {NgClass} from "@angular/common";
   `,
   styles: `
     .wrap{
+      transition: 250ms;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -22,12 +23,18 @@ import {NgClass} from "@angular/common";
       height: 100%;
       /*background-color: red;*/
     }
+    .wrap:hover{
+        background-color: black ;
+        color: white;
+    }
     .selected{
-      transition: 250ms;
       width: 100%;
       height: 100%;
       background-color: #20639B;
       color: white;
+    }
+    .selected:hover{
+      background-color: #20639B;
     }
   `
 })

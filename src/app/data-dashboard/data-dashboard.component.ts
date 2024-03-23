@@ -6,6 +6,9 @@ import {ObjectCreatorFormComponent} from "./object-creator-form/object-creator-f
 import {ObjectTypes} from "../data/object-types";
 import {ToolsService} from "../../tools.service";
 import {OTypeComponent} from "./otype/otype.component";
+import {DataServingService} from "../data-serving.service";
+import {HttpClientModule} from "@angular/common/http";
+import {AppComponent} from "../app.component";
 
 @Component({
   selector: 'app-data-dashboard',
@@ -16,10 +19,12 @@ import {OTypeComponent} from "./otype/otype.component";
     RouteOnClickDirective,
     ObjectCreatorFormComponent,
     NgIf,
-    OTypeComponent
+    OTypeComponent,
+    HttpClientModule
   ],
   template: `
-
+    <button (click)="dataHandler()">Test Data Serving</button>
+    <button (click)="deleteAllClickHandler()">\\ ! / Delete all \\ ! /</button>
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
       <div appBordered myTitle="Database" class="divSize5 heightMax">
         <div class="gridContainer">
@@ -28,8 +33,8 @@ import {OTypeComponent} from "./otype/otype.component";
             <ng-container *ngFor="let obj of ToolsService.Db.ObjList">
               <div class="objTile">
                 <h2>{{ToolsService.getTypeOfObject(obj)}}</h2>
-              <h3>Name : {{ obj.name }} </h3>
-                <h3>Id : {{ obj.id }}</h3>
+                <h3>Name : {{ obj.name }} </h3>
+                <p>Id : {{ obj.id }}</p>
                 <ng-container *ngIf="ToolsService.IsEngine(obj)">
                   MAX RPM : {{ToolsService.GetRpm(obj)}}
                 </ng-container>
@@ -56,6 +61,20 @@ import {OTypeComponent} from "./otype/otype.component";
   styleUrl: './data-dashboard.component.scss'
 })
 export class DataDashboardComponent {
+  // const serv = new DataServingService()
+  constructor(private dataService: DataServingService) { }
+  dataHandler(){
+    console.log("btn pressed")
+    this.dataService.postToolServiceData().subscribe(res=>{
+      console.log(res)
+    });
+  }
+  deleteAllClickHandler(){
+    console.log('DataToBeDeleted');
+    this.dataService.deleteToolServiceData().subscribe(res=>{
+      console.log(res)
+    })
+  }
   selectedType  = signal<ObjectTypes>(ObjectTypes.Chair);
   selectedFlagsArray:boolean[] =  Array(ToolsService.Db.GetAllObjectTypes().length).fill(false)
   TypeClickHandler(type:ObjectTypes, index:number ){
@@ -63,16 +82,16 @@ export class DataDashboardComponent {
     this.selectedFlagsArray[index] = true;
     this.SetSelectedType(type);
   }
-  SetFlag(index:number){
-    this.selectedFlagsArray[index] = true;
-  }
+  // SetFlag(index:number){
+  //   this.selectedFlagsArray[index] = true;
+  // }
 
-  logTools(){
-    console.log(ToolsService.Db.ObjectCountSignal())
-    console.log(ToolsService.Db.ObjList);
-  }
+  // logTools(){
+  //   console.log(ToolsService.Db.ObjectCountSignal())
+  //   console.log(ToolsService.Db.ObjList);
+  // }
   name =  "Data Dashboard";
-  tmpType:ObjectTypes = ObjectTypes.GasEngine
+  // tmpType:ObjectTypes = ObjectTypes.GasEngine
 
   SetSelectedType(type:ObjectTypes){
     this.selectedType.set(type);
@@ -83,5 +102,5 @@ export class DataDashboardComponent {
 
 
   protected readonly ToolsService = ToolsService;
-  protected readonly ObjectTypes = ObjectTypes;
+  // protected readonly ObjectTypes = ObjectTypes;
 }

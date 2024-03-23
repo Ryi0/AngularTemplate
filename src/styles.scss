@@ -221,6 +221,20 @@ input{
   border: none;
   outline: none;
 }
+button{
+  padding: .5ch;
+  transition: 250ms ease-out;
+  font-family: $font-family-primary;
+  background-color: desaturate(darken($chosenBackgroundColor, 25), 95);
+  color: $chosenBackgroundColor;
+
+  border: none;
+  border-radius: 7px;
+}
+button:hover{
+  background-color: darken(desaturate($chosenBackgroundColor, 90), 5);
+  color: $vibrantPrimary;
+}
 .flex{
   display: flex;
 }
@@ -235,3 +249,6 @@ input{
 .selfEnd{
   align-self: flex-end;
 }
+
+//--------------------------------------------------------------------<    >-----------------------------------------------------------------
+

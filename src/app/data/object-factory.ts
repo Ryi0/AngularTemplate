@@ -1,9 +1,11 @@
 import {InterfaceObject} from "./i-object";
 import {ObjectTypes} from "./object-types";
 import {Engine} from "./engine";
+import {ToolsService} from "../../tools.service";
 
 abstract class furniture implements InterfaceObject{
     id: number;
+
     name: string;
     attribute: any;
     BurnFurniture(){
@@ -44,10 +46,12 @@ class Table extends furniture {
     }
 }
 
+
 export class ObjectFactory {
     static id:number = 0;
 
     public static createObject(type:ObjectTypes, name: string, attribute: any) {
+      let createdObject = (()=>{
       ObjectFactory.id++;
       if (type === 'Chair') {
         return new Chair(ObjectFactory.id, name, attribute);
@@ -65,8 +69,21 @@ export class ObjectFactory {
         ObjectFactory.id--;
         throw new Error('Invalid type');
       }
+      })
+      // const ReturnObject = createdObject();
+      const ReturnObject = this.setType(createdObject());
+
+      console.log(ReturnObject)
+      return ReturnObject;
     }
-    public static setRpm(engine: any|Engine, maxRpm: number) {
+
+    public static setType(obj:InterfaceObject){
+     const o = obj;
+      o.type = ToolsService.getTypeOfObject(obj);
+      return o;
+    }
+
+    public static setRpm(engine:InterfaceObject, maxRpm: number) {
       if (!(engine instanceof Engine)) {
         throw new Error(`${engine}: is not a valid engine`);
       }
