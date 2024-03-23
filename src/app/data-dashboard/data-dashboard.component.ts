@@ -76,7 +76,7 @@ export class DataDashboardComponent {
     this.dataService.GETRequestDataToolService().subscribe(value => {
       ToolsService.Db.serverData = value;
       ToolsService.Db.parseServerData();
-      console.log(ToolsService.Db.serverData)
+      // console.log(ToolsService.Db.serverData)
     });
   }
   deleteAllClickHandler(){

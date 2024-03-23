@@ -4,7 +4,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ObjectFactory} from "../../data/object-factory";
 import {BorderedDirective} from "../../directives/bordered.directive";
 import {ToolsService} from "../../../tools.service";
-import {NgIf} from "@angular/common";
+import {NgClass, NgIf} from "@angular/common";
 import {Engine} from "../../data/engine";
 
 @Component({
@@ -13,7 +13,8 @@ import {Engine} from "../../data/engine";
   imports: [
     ReactiveFormsModule,
     BorderedDirective,
-    NgIf
+    NgIf,
+    NgClass
   ],
   template: `
     <form class=" form" [formGroup]="myForm" (ngSubmit)="submitForm()" autocomplete="off">
@@ -23,18 +24,25 @@ import {Engine} from "../../data/engine";
       <div appBordered myTitle="Attribute"  style="padding:5px">
         <input id="attribute" type="text" formControlName="attribute">
       </div>
-      <ng-container *ngIf="type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine">
-        <div appBordered myTitle="Rpm" style="padding:5px">
+
+        <div [ngClass]="{'invisible':!(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)}" appBordered myTitle="Rpm" style="padding:5px">
           <input id="rpm" type="text" formControlName="rpm">
         </div>
-      </ng-container>
+
       <button type="submit">Submit</button>
     </form>
   `,
   styles: `
     :host{
-      padding: 0 0 2rem 0;
+      padding: 0 0 .5ch 0;
       height: fit-content;
+    }
+    div{
+      transition: 200ms;
+    }
+    .invisible{
+
+      opacity: 0;
     }
   `
 })
