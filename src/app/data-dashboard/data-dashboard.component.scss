@@ -56,6 +56,8 @@ app-otype {
   flex: 0; // This will allow the item to grow and shrink
 }
 .objTile{
+  border-radius: 1ch;
+  transition: 125ms;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -69,4 +71,9 @@ app-otype {
   color: $chosenPrimary-color;
   //padding: $spacing-small;
   text-align: center;
+}
+.selected{
+  border-radius: 3ch;
+  background-color: $chosenPrimary-color;
+  color: $vibrantPrimary;
 }

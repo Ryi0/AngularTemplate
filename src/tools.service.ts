@@ -24,6 +24,16 @@ export class ToolsService {
       throw new Error("Not an engine")
     }
   }
+  static GetAllEnginesId(){
+    const engines = new Array<Engine>;
+
+  }
   constructor() { }
 }
 
+class Tool1{
+  public ToolName = "Engine Data Tool";
+  constructor() {
+
+  }
+}

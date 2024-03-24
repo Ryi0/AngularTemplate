@@ -1,5 +1,5 @@
 import {InterfaceObject} from "./i-object";
-import {computed, signal} from "@angular/core";
+import {computed, signal, WritableSignal} from "@angular/core";
 import {ObjectTypes} from "./object-types";
 import {ObjectFactory} from "./object-factory";
 import {ToolsService} from "../../tools.service";
@@ -18,7 +18,7 @@ export class Database {
   public serverData: any[] | any;
   private _ObjList: Array<InterfaceObject> = [];
   ObjectCountSignal = signal(0);
-
+  public SelectedItems: WritableSignal<InterfaceObject[]> = signal(new Array<InterfaceObject>());
   public constructor(objList: Array<InterfaceObject>) {
     this.ObjList = objList;
     this.ObjectCountSignal.set(this.ObjList.length);

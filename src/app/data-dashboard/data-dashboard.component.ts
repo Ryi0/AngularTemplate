@@ -1,4 +1,4 @@
-import {Component, WritableSignal, signal} from '@angular/core';
+import {Component, WritableSignal, signal, computed} from '@angular/core';
 import {BorderedDirective} from "../directives/bordered.directive";
 import {NgForOf, NgIf} from "@angular/common";
 import {RouteOnClickDirective} from "../directives/route-on-click.directive";
@@ -31,8 +31,8 @@ import {InterfaceObject} from "../data/i-object";
         <div class="gridContainer">
 
           <div class="dataGrid">
-            <ng-container *ngFor="let obj of ToolsService.Db.displayData">
-              <div (click)="DbItemClickHandler(obj)" class="objTile">
+            <ng-container *ngFor="let obj of ToolsService.Db.displayData index as humanReadableObjectId">
+              <div [id]="'dbDivItemId'+obj.id" (click)="DbItemClickHandler(obj)" class="objTile">
                 <h2>{{ToolsService.getTypeOfObject(obj)}}</h2>
                 <h3>Name : {{ obj.name }} </h3>
                 <p>Id : {{ obj.id }}</p>
@@ -56,6 +56,7 @@ import {InterfaceObject} from "../data/i-object";
       </div>
       <app-object-creator-form [type]="selectedType()"></app-object-creator-form>
     <div>Selected ID(s) : {{selectedIdList()}} </div>
+      <button (click)="SendSelectionToLocalDb()">Confirm Selection</button>
     </div>
 
   `,
@@ -92,19 +93,61 @@ export class DataDashboardComponent {
   }
 
   DbItemClickHandler(Item:InterfaceObject){
+
     const id = Item.id;
+    let tmpIndex;
+    if (this.selectedItemList.find((value1, index) => {
+      tmpIndex = index;
+      return value1.id === Item.id;
+    })!==undefined){
+      console.log("this item is selected");
+      this.selectedItemList.splice(tmpIndex!, 1);
+      this.selectedIdList.update(value => {
+        let message:string = "";
+        const uVal= this.selectedItemList.flatMap(value1 => {
+          return value1.id;
+        });
+        uVal.forEach(value2 => {
+          message += value2+" "
+        })
+        return message;
+      })
+      /*TODO:[make a component for the item tiles to simplify a lot of this code or
+         at the very least, not use document methods]*/
+      const element = document.getElementById(`dbDivItemId${id}`);
+      if (element){
+        element.classList.remove("selected");
+      }
+      return;
+    }
     this.dataService.GETRequestDataToolById(id).subscribe(value => {
       console.log(value);
       this.selectedItemList.push((<InterfaceObject>value));
       console.log(this.selectedItemList);
       this.selectedIdList.update(value1 => {
-       return value1 + " "+(<InterfaceObject>value).id
+        const element = document.getElementById(`dbDivItemId${id}`);
+        if (element){
+          element.classList.add("selected");
+        }
+        console.log(element)
+        let message:string = "";
+        const uVal= this.selectedItemList.flatMap(value1 => {
+          return value1.id;
+        });
+         uVal.forEach(value2 => {
+           message += value2+" "
+         })
+        return message;
       })
+
     });
+
   }
 
 
-
+  SendSelectionToLocalDb(){
+    ToolsService.Db.SelectedItems.set(this.selectedItemList);
+  }
   SetSelectedType(type:ObjectTypes){
     this.selectedType.set(type);
     console.log(this.selectedType());
