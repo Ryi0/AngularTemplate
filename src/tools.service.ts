@@ -34,13 +34,15 @@ class AttributeMethod extends ToolingTemplate {
     for (const Attribute of this.ListOfAttributes) {
       // console.log(this.countAttribute(Attribute))
       this.attribKVPairArray.push(new Map([[Attribute, this.countAttribute(Attribute)]]))
-      for (let i = 0; i < this.attribKVPairArray.length; i++) {
-        console.log(this.attribKVPairArray[i].get(Attribute));
-      }
+      // for (let i = 0; i < this.attribKVPairArray.length; i++) {
+      //   console.log(this.attribKVPairArray[i].get(Attribute));
+      // }
+      this.addToAttributesCount(Attribute)
     }
     console.log(this.attribKVPairArray);
 
   }
+
 
   /**
    * Get all the different attributes and assign them to an array
@@ -76,8 +78,8 @@ class AttributeMethod extends ToolingTemplate {
     let count = 0;
     for (let i = 0; i < this.AllAssignedAttributes.length; i++) {
       if (sortedList[i]===attribute){
-        console.log(sortedList[i]);
-        console.log(sortedList[i+1]);
+        // console.log(sortedList[i]);
+        // console.log(sortedList[i+1]);
         if (sortedList[i+1]!==attribute){
 
           count = i;
