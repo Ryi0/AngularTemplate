@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BorderedDirective} from "../../../directives/bordered.directive";
+import {ToolsService} from "../../../../tools.service";
 
 @Component({
   selector: 'app-first-tool',
@@ -14,7 +15,17 @@ import {BorderedDirective} from "../../../directives/bordered.directive";
   `,
   styleUrl: './first-tool.component.scss'
 })
-export class FirstToolComponent {
+export class FirstToolComponent implements OnInit{
+  ngOnInit(): void {
+  this.test();
+  }
   ToolName = "FirstToolComponent";
+  attrTool = ToolsService.AttributeToolFactory(this.ToolName)
+  test(){
+    this.attrTool.mainTool();
+    console.log(this.attrTool.ListOfAttributes);
+    // console.log(this.attrTool.AllAssignedAttributes);
+  }
 
 }
+
