@@ -50,24 +50,37 @@ export class Database {
     console.log(this._ObjList)
   }
   public parseServerData(){
+    this.parseData(this.serverData, this.displayData);
+  }
+  public parseSelectionData(RawData:any){
+    const selectionData: any[] = [];
+    this.parseData(RawData, selectionData )
+    this.SelectedItems.set(selectionData);
+  }
+
+  public StoreServerDataLocally(){
+    this.parseData(this.serverData, this.ObjList)
+  }
+
+  public parseData(Data:any[], Destination:any[]){
     const parsedData: InterfaceObject[] = [];
-    this.serverData.forEach((value:object) =>{
+    Data.forEach((value:object) =>{
       let tmpVal = <InterfaceObject>value;
       const type = tmpVal.type
       if (type!=undefined){
-       const typedObj = ObjectFactory.createObject(ObjectTypes[<ObjectTypes>type], tmpVal.name, tmpVal.attribute);
+        const typedObj = ObjectFactory.createObject(ObjectTypes[<ObjectTypes>type], tmpVal.name, tmpVal.attribute);
         if (ToolsService.IsEngine(typedObj)) {
           const tmpEng = <Engine>value;
           console.log(this.GetMaxRpm(tmpVal));
           ObjectFactory.setRpm(typedObj, this.GetMaxRpm(tmpVal));
         }
-        // console.log((<Engine>typedObj).maxRpm)
         parsedData.push( typedObj);
       }
-
-      // console.log((<Engine>value).maxRpm)
     })
-    this.displayData = parsedData;
+    Destination.splice(0,Destination.length);
+    parsedData.forEach((value:object) =>{
+      Destination.push(value);
+    })
     console.log(this.displayData)
   }
   public GetMaxRpm(engine:InterfaceObject){

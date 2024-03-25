@@ -9,6 +9,7 @@ import {OTypeComponent} from "./otype/otype.component";
 import {DataServingService} from "../data-serving.service";
 import {HttpClientModule} from "@angular/common/http";
 import {InterfaceObject} from "../data/i-object";
+import {askConfirmation} from "@angular/cli/src/utilities/prompt";
 
 @Component({
   selector: 'app-data-dashboard',
@@ -23,9 +24,10 @@ import {InterfaceObject} from "../data/i-object";
     HttpClientModule
   ],
   template: `
-    <button (click)="dataHandler()">Test Data Serving</button>
-    <button (click)="deleteAllClickHandler()">\\ ! / Delete all \\ ! /</button>
-    <button (click)="logDbData()">Log db data</button>
+    <button (click)="dataHandler()">Serve Data</button>
+    <button id="deleteButt" (click)="deleteAllClickHandler()">\\ ! / Delete all \\ ! /</button>
+    <button (click)="logDbData()">Load Server Data</button>
+    <button (click)="StoreDataLocally()">Cache Server Data</button>
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
       <div appBordered myTitle="Database" class="divSize5 heightMax">
         <div class="gridContainer">
@@ -81,8 +83,15 @@ export class DataDashboardComponent {
     });
   }
   deleteAllClickHandler(){
+    const decision = confirm(`Are you sure you want to delete ${ToolsService.Db.serverData.length} documents from the Database?`);
+    if (!decision){
+      return;
+    }
     console.log('DataToBeDeleted');
-    this.dataService.deleteToolServiceData().subscribe()
+    this.dataService.deleteToolServiceData().subscribe();
+    alert();
+    confirm();
+
   }
   selectedType  = signal<ObjectTypes>(ObjectTypes.Chair);
   selectedFlagsArray:boolean[] =  Array(ToolsService.Db.GetAllObjectTypes().length).fill(false)
@@ -146,7 +155,17 @@ export class DataDashboardComponent {
 
 
   SendSelectionToLocalDb(){
-    ToolsService.Db.SelectedItems.set(this.selectedItemList);
+    ToolsService.Db.parseSelectionData(this.selectedItemList);
+    alert(`Selected ${ToolsService.Db.SelectedItems().length} Items`)
+    console.log(ToolsService.Db.serverData);
+    console.log(ToolsService.Db.displayData);
+    console.log(ToolsService.Db.ObjList)
+    console.log(ToolsService.Db.SelectedItems())
+  }
+
+  StoreDataLocally(){
+    ToolsService.Db.StoreServerDataLocally();
+    console.log(ToolsService.Db.ObjList)
   }
   SetSelectedType(type:ObjectTypes){
     this.selectedType.set(type);

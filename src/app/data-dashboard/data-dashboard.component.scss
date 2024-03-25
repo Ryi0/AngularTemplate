@@ -57,7 +57,7 @@ app-otype {
 }
 .objTile{
   border-radius: 1ch;
-  transition: 125ms;
+  transition: 225ms;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -72,8 +72,25 @@ app-otype {
   //padding: $spacing-small;
   text-align: center;
 }
+.objTile:hover{
+  background-color: $chosenFont-color;
+  color: $chosenBackgroundColor;
+}
 .selected{
   border-radius: 3ch;
   background-color: $chosenPrimary-color;
   color: $vibrantPrimary;
+}
+.selected:hover{
+  //background-color: $chosenBackgroundColor;
+  color: $vibrantPrimary;
+}
+#deleteButt{
+  background-color: #363636;
+  color: #ff2a2a;
+}
+
+#deleteButt:hover{
+  background-color: #f5927c;
+  color: #363636;
 }
