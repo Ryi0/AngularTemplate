@@ -9,26 +9,42 @@ class AttributeMethod extends ToolingTemplate {
   override toolName: string;
 
   /**
-   * Not sure why I did it that way, maybe not totally usefully useless
+   * Not sure why I did it that way, maybe not totally usefully useless.
+   * This array of maps is kinda tiresome. Could be cool if I want to easily store data or stats
+   * to either of the attributes. But downside is, I feel like it's extra dumb therefore I can't work on it.
    */
+  // override mainTool(): void {
+  //   this.setAllAttributes();
+  //   for (const Attribute of this.ListOfAttributes) {
+  //     // console.log(this.getLastAttributeIndex(Attribute))
+  //     this.attribKVPairArray.push(new Map([[Attribute, this.getLastAttributeIndex(Attribute)]]))
+  //     this.attribKVPairArray[0].set(Attribute, this.getLastAttributeIndex(Attribute));
+  //     this.addToAttributesCount(Attribute)
+  //   }
+  //   console.log(this.attribKVPairArray);
+  //   // this.calculateRealCount(this.attribKVPairArray)
+  // }
   override mainTool(): void {
     this.setAllAttributes();
     for (const Attribute of this.ListOfAttributes) {
       // console.log(this.getLastAttributeIndex(Attribute))
-      this.attribKVPairArray.push(new Map([[Attribute, this.getLastAttributeIndex(Attribute)]]))
+      this.attributeCountMap.set(Attribute, this.getLastAttributeIndex(Attribute));
       this.addToAttributesCount(Attribute)
     }
-    console.log(this.attribKVPairArray);
-    // this.calculateRealCount(this.attribKVPairArray)
+    console.log(this.attributeCountMap);
+    this.calculateRealCount(this.attributeCountMap)
+    // console.log(this.calculateRealCount(this.attributeCountMap));
   }
   public AllAssignedAttributes;
   public ListOfAttributes = new Array<string>();
   attribKVPairArray = new Array<Map<string, number>>
-
+  attributeCountMap = new Map<string, number>;
 
   private calculateRealCount(KVAttributesMap: Map<string, number>) {
-    const attrMap = this.attribKVPairArray;
-
+    const attrMap = KVAttributesMap;
+    for (const key of attrMap.keys()) {
+      attrMap.set(key, attrMap.get(key)!+1 );
+    }
     console.log(attrMap);
   }
   private setAllAttributes(){
