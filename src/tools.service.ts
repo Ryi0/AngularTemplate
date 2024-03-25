@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Database} from "./app/data/database";
 import {InterfaceObject} from "./app/data/i-object";
 import {ObjectTypes} from "./app/data/object-types";
@@ -10,14 +10,15 @@ import {ToolingTemplate} from "./app/tools/tool-dir/tooling-template";
 })
 export class ToolsService {
   static Db = new Database([]);
-  static getTypeOfObject = (obj:InterfaceObject): any => {
+  static getTypeOfObject = (obj: InterfaceObject): any => {
 
     return Object.getPrototypeOf(obj).constructor.name;
   }
 
-  static IsEngine(obj:InterfaceObject):boolean {
+  static IsEngine(obj: InterfaceObject): boolean {
     return obj instanceof Engine;
   }
+
   static GetRpm(obj: InterfaceObject) {
     if (ToolsService.IsEngine(obj)) {
       return (<Engine>obj).maxRpm
@@ -25,40 +26,51 @@ export class ToolsService {
       throw new Error("Not an engine")
     }
   }
-  static GetAllEnginesId(){
+
+  static GetAllEnginesId() {
     const engines = new Array<Engine>;
 
   }
-  constructor() { }
+
+  constructor() {
+  }
 }
 
-class AttributeMethod extends ToolingTemplate{
-    override toolName: string;
+class AttributeMethod extends ToolingTemplate {
+  override toolName: string;
 
-
+  /**
+   * Not sure why I did it that way, maybe not totally usefully useless
+   */
   override mainTool(): void {
-    for (const AssignedAttributes in this.GetAllAssignedStringAttributes()) {
-
+    for (const Attribute of this.ListOfAttributes) {
+      for (const AssignedAttributes in this.AllAssignedAttributes) {
+        if (Attribute === AssignedAttributes) {
+        } else this.ListOfAttributes.push(AssignedAttributes);
+      }
     }
   }
 
   /**
    * Get all the different attributes and assign them to an array
    */
-  GetAllAssignedStringAttributes(){
-    return this.CachedData.reduce((acc:string[], value) => {
-      if (typeof value.attribute === "string"){
+  private GetAllAssignedStringAttributes() {
+    return this.CachedData.reduce((acc: string[], value) => {
+      if (typeof value.attribute === "string") {
         acc.push(value.attribute);
       }
       return acc;
     }, []);
   }
-  ListOfAttributes = new Array<string>();
+  public AllAssignedAttributes;
+  public ListOfAttributes = new Array<string>();
 
-    constructor(name:string) {
-      super();
-      this.toolName = name;
-    }
+
+  constructor(name: string) {
+    super();
+    this.toolName = name;
+    this.AllAssignedAttributes = this.GetAllAssignedStringAttributes()
+  }
 
 
 }
