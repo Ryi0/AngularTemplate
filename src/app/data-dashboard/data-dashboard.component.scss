@@ -54,8 +54,11 @@ app-otype {
   overflow: scroll; // Change this to auto to hide scrollbar when not needed
   max-height: 100%; // This allows the scrollbar to respect the size of the parent
   flex: 0; // This will allow the item to grow and shrink
+  overflow-x: hidden;
+
 }
 .objTile{
+  @include insetShadow(50, 10);
   border-radius: 1ch;
   transition: 225ms;
   display: flex;
@@ -67,22 +70,26 @@ app-otype {
   //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
   width: 100%;
   height: 100%;
-  background-color: $chosenSecondary-color;
-  color: $chosenPrimary-color;
+  background-color: transparentize($chosenFont-color,0.99);
+  color: $vibrantPrimary;
   //padding: $spacing-small;
   text-align: center;
+
 }
 .objTile:hover{
-  background-color: $chosenFont-color;
-  color: $chosenBackgroundColor;
+  //@include insetShadow(50, 50, 25);
+  background-color: $chosenPrimary-color;
+  color: $chosenFont-color;
 }
 .selected{
+
   border-radius: 3ch;
-  background-color: $chosenPrimary-color;
-  color: $vibrantPrimary;
+  background-color: $chosenSecondary-color;
+  color: $chosenFont-color;
 }
 .selected:hover{
-  //background-color: $chosenBackgroundColor;
+  @include insetShadow(90, 3, -55);
+  background-color: transparentize($chosenPrimary-color,0.5);
   color: $vibrantPrimary;
 }
 #deleteButt{

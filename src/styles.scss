@@ -5,7 +5,7 @@ $lightPrimary-color: #32586e;
 $lightSecondary-color: #e4eeec;
 
 
-$darkPrimary-color: #20639B;
+$darkPrimary-color: #42445A;
 $darkSecondary-color: #17202A;
 $darkBackground-color: #252628;
 $lightBackground-color: #fffdf3;
@@ -111,6 +111,10 @@ $breakpoint-desktop: 1024px;
   }
 }
 
+@mixin insetShadow($blur:50, $spread:10, $vertical:0 , $myTransparency:1){
+  box-shadow: inset 0px $vertical + px $blur + px $spread + px rgba(7, 7, 7, $myTransparency );
+}
+
 // Usage example
 
 //.button {
@@ -161,9 +165,41 @@ $vibrantPrimary:lighten($vibrantPrimary, 20);
 body {
   text-align: -webkit-center;
   font-family: $font-family-primary;
-  color: $chosenPrimary-color;
+  color: $vibrantPrimary;
   padding: 0 2rem 2rem;
   background-color: $chosenBackgroundColor;
+}
+
+html{
+  *::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: $chosenSecondary-color;
+  }
+
+  *::-webkit-scrollbar-track:hover {
+    background-color: $chosenSecondary-color;
+  }
+
+  *::-webkit-scrollbar-track:active {
+    background-color: $chosenSecondary-color;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: $vibrantPrimary;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: $chosenPrimary-color;
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background-color: $vibrantPrimary;
+  }
 }
 
 // Utility classes
@@ -197,6 +233,7 @@ body {
 .divSize5 {
   width: 100%;
   height: 100%;
+  @include insetShadow(90, 2, 15, .5)
 }
 //--------------------------------------------------------------------< Forms >-----------------------------------------------------------------
 
