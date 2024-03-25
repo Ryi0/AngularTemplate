@@ -45,7 +45,26 @@ class AttributeMethod extends ToolingTemplate {
     for (const key of attrMap.keys()) {
       attrMap.set(key, attrMap.get(key)!+1 );
     }
-    console.log(attrMap);
+    const arrayFromMap = Array.from(attrMap);
+    for (let i = 0; i < arrayFromMap.length; i++) {
+      try {
+        const nextEntry = arrayFromMap[i+1][1];
+        if (nextEntry!=undefined) {
+          arrayFromMap[i][1] = arrayFromMap[i][1] - arrayFromMap[i+1][1];
+          // console.log(arrayFromMap[i ][1] - arrayFromMap[i+1][1])
+          console.log(arrayFromMap[i])
+        }
+      }
+      catch (e){
+        console.log("There is no item past this. Could/should probably add a checker for the index to see if it is over the length"+e)
+      }
+
+    }
+    // for (let i = 0; i < attrMap.size; i++) {
+    //   attrMap.entries()
+    // }
+
+    console.log(arrayFromMap);
   }
   private setAllAttributes(){
     for (const assignedAttribute of this.AllAssignedAttributes) {
