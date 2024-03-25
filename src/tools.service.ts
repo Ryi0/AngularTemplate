@@ -3,6 +3,7 @@ import {Database} from "./app/data/database";
 import {InterfaceObject} from "./app/data/i-object";
 import {ObjectTypes} from "./app/data/object-types";
 import {Engine} from "./app/data/engine";
+import {ToolingTemplate} from "./app/tools/tool-dir/tooling-template";
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +32,33 @@ export class ToolsService {
   constructor() { }
 }
 
-class Tool1{
-  public ToolName = "Engine Data Tool";
-  constructor() {
+class AttributeMethod extends ToolingTemplate{
+    override toolName: string;
 
+
+  override mainTool(): void {
+    for (const AssignedAttributes in this.GetAllAssignedStringAttributes()) {
+
+    }
   }
+
+  /**
+   * Get all the different attributes and assign them to an array
+   */
+  GetAllAssignedStringAttributes(){
+    return this.CachedData.reduce((acc:string[], value) => {
+      if (typeof value.attribute === "string"){
+        acc.push(value.attribute);
+      }
+      return acc;
+    }, []);
+  }
+  ListOfAttributes = new Array<string>();
+
+    constructor(name:string) {
+      super();
+      this.toolName = name;
+    }
+
+
 }
