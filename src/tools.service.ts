@@ -31,9 +31,9 @@ class AttributeMethod extends ToolingTemplate {
       this.attributeCountMap.set(Attribute, this.getLastAttributeIndex(Attribute));
       this.addToAttributesCount(Attribute)
     }
-    console.log(this.attributeCountMap);
     this.calculateRealCount(this.attributeCountMap)
     // console.log(this.calculateRealCount(this.attributeCountMap));
+    console.log(this.attributeCountMap);
   }
   public AllAssignedAttributes;
   public ListOfAttributes = new Array<string>();
@@ -58,13 +58,13 @@ class AttributeMethod extends ToolingTemplate {
       catch (e){
         console.log("There is no item past this. Could/should probably add a checker for the index to see if it is over the length"+e)
       }
-
     }
     // for (let i = 0; i < attrMap.size; i++) {
     //   attrMap.entries()
     // }
-
-    console.log(arrayFromMap);
+    const mapReturn = new Map( arrayFromMap);
+    console.log(mapReturn);
+    this.attributeCountMap = mapReturn;
   }
   private setAllAttributes(){
     for (const assignedAttribute of this.AllAssignedAttributes) {
