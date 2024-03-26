@@ -66,7 +66,7 @@ $base-blur: 10px;
   &:before {
     content: attr(data-title);
     position: absolute;
-    z-index: 1;
+    z-index: 10;
     top: -0.5em;
     left: $spacing-small;
     background: $chosenBackgroundColor;
@@ -76,14 +76,12 @@ $base-blur: 10px;
 }
 
 @mixin gradBlur($inset:-10vh){
-  $NavHeight:10vh;
-  $HrHeight:1vh;
-  &::before {
+  &:before {
     display: block;
     // background: rgba(0, 0, 0, 0.34);
     content: '';
     position: absolute;
-    //z-index: -100;
+    z-index: -1;
     inset: $inset;
     //mask:   linear-gradient(to top, transparent 0%, black 25% 75%, transparent 100%),linear-gradient(to left, transparent 0%, black 25% 75%, transparent 100%);
     mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 15%, transparent 100%);
@@ -151,6 +149,7 @@ $base-blur: 10px;
 
 @mixin backdropBlur() {
   &:before {
+    z-index: 5;
     background: rgba(0, 0, 0, 0.34);
     mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, transparent 100%);
     display: block;
@@ -267,7 +266,7 @@ $base-blur: 10px;
   );
   @return $theme;
 }
-$is-dark-theme: false;
+$is-dark-theme: true;
 @function SIMPLE_set-theme($boolean){
   $is-dark-theme:$boolean;
 }
@@ -430,5 +429,47 @@ button:hover{
 
 
 
-//--------------------------------------------------------------------<    >-----------------------------------------------------------------
 
+//--------------------------------------------------------------------< Components styling  >-----------------------------------------------------------------
+
+app-otype {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
+  width: 100%;
+
+  background-color: $chosenBackgroundColor;
+  color: $tertiary;
+  //padding: $spacing-small;
+  text-align: center;
+  height: 100%;
+  .wrap {
+    transition: 250ms;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    /*background-color: red;*/
+  }
+
+  .wrap:hover {
+
+    background-color: $chosenSecondary-color;
+    color: $vibrantPrimary;
+  }
+
+  .selected {
+    width: 100%;
+    height: 100%;
+    background-color: $chosenPrimary-color;
+    color: $chosenSecondary-color;
+  }
+
+  .selected:hover {
+    background-color: $tertiary;
+  }
+}
+//--------------------------------------------------------------------<    >-----------------------------------------------------------------

@@ -26,7 +26,7 @@ import {Engine} from "../../data/engine";
       </div>
 
         <div [ngClass]="{'invisible':!(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)}" appBordered myTitle="Rpm" style="padding:5px">
-          <input id="rpm" type="text" formControlName="rpm">
+          <input [disabled]="(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)" id="rpm" type="text" formControlName="rpm">
         </div>
 
       <button type="submit">Submit</button>

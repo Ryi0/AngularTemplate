@@ -8,37 +8,12 @@ import {NgClass} from "@angular/common";
     NgClass
   ],
   template: `
-    <div  class="" [ngClass]="{'selected':isSelected()}">
+    <div  class="wrap" [ngClass]="{'selected':isSelected()}">
         {{name}}
     </div>
   `,
   styles: `
-    .wrap {
-      transition: 250ms;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      /*background-color: red;*/
-    }
 
-    .wrap:hover {
-      /*background-color: #1a1c1e;*/
-      /*color: #99a4d0;*/
-    }
-
-    .selected {
-      width: 100%;
-      height: 100%;
-      background-color: #20639B;
-      color: white;
-    }
-
-    .selected:hover {
-      background-color: #20639B;
-    }
   `
 })
 export class OTypeComponent {
