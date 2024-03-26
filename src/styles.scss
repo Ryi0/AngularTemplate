@@ -173,7 +173,7 @@ $base-blur: 10px;
  */
 @mixin clipPathBorder($clipSpace: .75em){
   &:before{
-
+    pointer-events: none;
     background: rgba(0, 0, 0, 0.34);
     display: block;
     $calculatedClipSpace: calc(100% - $clipSpace);
@@ -267,7 +267,7 @@ $base-blur: 10px;
   );
   @return $theme;
 }
-$is-dark-theme: true;
+$is-dark-theme: false;
 @function SIMPLE_set-theme($boolean){
   $is-dark-theme:$boolean;
 }
@@ -327,11 +327,11 @@ html{
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background-color: $chosenPrimary-color;
+    background-color: $vibrantPrimary;
   }
 
   *::-webkit-scrollbar-thumb:active {
-    background-color: $vibrantPrimary;
+    background-color: $tertiary;
   }
 }
 
@@ -342,7 +342,7 @@ html{
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/< Global classes for divs >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
 
 .custBordered{
-  margin-top: 0;
+  margin-top: 5px;
   //margin-top: 1vh; //might need at one point
   @include bordered-container;
 

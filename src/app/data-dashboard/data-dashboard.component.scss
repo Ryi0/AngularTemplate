@@ -1,31 +1,68 @@
 @use "../../styles" as *;
-:host{
+
+:host {
   width: 100%;
   height: 95%;
 }
 
 app-otype {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
-      width: 100%;
-      background-color: $chosenSecondary-color;
-      color: $tertiary;
-      //padding: $spacing-small;
-      text-align: center;
-      height: 100%;
+  transition: 250ms;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
+  background-color: $chosenSecondary-color;
+  color: $tertiary;
+  //padding: $spacing-small;
+  text-align: center;
+
+  &:hover {
+    background-color: $tertiary;
+    color: $vibrantPrimary;
+  }
+
+  .wrap {
+    transition: 250ms;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    /*background-color: red;*/
+  }
+
+  .wrap:hover {
+    background-color: #1a1c1e;
+    color: #99a4d0;
+  }
+
+  .selected {
+    width: 100%;
+    height: 100%;
+    background-color: #20639B;
+    color: white;
+  }
+
+  .selected:hover {
+    background-color: #20639B;
+  }
 }
 
-.typesGrid{
+.typesGrid {
   //@include responsive-grid(5em, 10em, auto, 0); // If you don't pass any argument, it will use the default values
   display: grid;
   grid-template-columns: 1fr 1fr;
   //grid-template-rows: fit-content(100%);
   height: 100%;
   width: 100%;
+
   .tile {
-  display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
@@ -36,10 +73,11 @@ app-otype {
     text-align: center;
     height: 100%;
   }
+
   padding-bottom: 1ch;
 }
 
-.dataGrid{
+.dataGrid {
   @include responsive-grid(10em, 15em, 10em, .25ch);
   //@include gradBlur();
 
@@ -49,12 +87,14 @@ app-otype {
   //overflow: auto;
   //@include testBlurSecond();
 }
-.heightMax{
+
+.heightMax {
   //overflow: auto; // Change this to auto to hide scrollbar when not needed
   min-height: 40%; // This allows the scrollbar to respect the size of the parent
   flex: 0; // This will allow the item to grow and shrink
 }
-.gridContainer{
+
+.gridContainer {
   //@include testBlur();
   //@include testBlur();
   @include backdropBlur();
@@ -66,9 +106,10 @@ app-otype {
   //position: relative;
   width: 100%;
 }
-.objTile{
 
-  @include insetShadow(50, 10);
+.objTile {
+
+  @include insetShadow(50, 10, 0, .5);
   border-radius: 1ch;
   transition: 225ms;
   display: flex;
@@ -80,43 +121,47 @@ app-otype {
   //@include card-styles($chosenPrimary-color, $chosenBackgroundColor);
   width: 100%;
   height: 100%;
-  background-color: transparentize($chosenFont-color,0.99);
+  background-color: transparentize($chosenFont-color, 0.99);
   color: $vibrantPrimary;
   //padding: $spacing-small;
   text-align: center;
   //@include blur-effect();
 }
-.objTile:hover{
+
+.objTile:hover {
   //@include insetShadow(50, 50, 25);
-  background-color: $chosenPrimary-color;
+  background-color: $vibrantPrimary;
   color: $chosenFont-color;
 }
-.selected{
+
+.selected {
 
   border-radius: 3ch;
   background-color: $chosenSecondary-color;
   color: $chosenFont-color;
 }
-.selected:hover{
-  @include insetShadow(90, 3, -55);
-  background-color: transparentize($chosenPrimary-color,0.5);
+
+.selected:hover {
+  @include insetShadow(90, 3, -55, .5);
+  background-color: transparentize($tertiary, 0.25);
   color: $vibrantPrimary;
 }
-#deleteButt{
+
+#deleteButt {
   background-color: #363636;
   color: #ff2a2a;
 }
 
-#deleteButt:hover{
+#deleteButt:hover {
   background-color: #f5927c;
   color: #363636;
 }
 
-#db{
+#db {
   padding: 0;
 }
 
-.dbBorder{
+.dbBorder {
   //display: -webkit-box;
   position: relative;
   width: 100%;

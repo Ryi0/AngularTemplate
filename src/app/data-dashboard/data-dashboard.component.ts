@@ -58,7 +58,7 @@ import {askConfirmation} from "@angular/cli/src/utilities/prompt";
       </div>
       </div>
       <app-object-creator-form [type]="selectedType()"></app-object-creator-form>
-    <div>Selected ID(s) : {{selectedIdList()}} </div>
+      <div style="margin-bottom: 10px"> <p> Selected ID(s) : {{selectedIdList()}} </p> </div>
       <button (click)="SendSelectionToLocalDb()">Confirm Selection</button>
     </div>
 

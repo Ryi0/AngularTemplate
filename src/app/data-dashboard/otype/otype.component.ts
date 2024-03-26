@@ -8,7 +8,7 @@ import {NgClass} from "@angular/common";
     NgClass
   ],
   template: `
-    <div  class="wrap" [ngClass]="{'selected':isSelected()}">
+    <div  class="" [ngClass]="{'selected':isSelected()}">
         {{name}}
     </div>
   `,
@@ -25,8 +25,8 @@ import {NgClass} from "@angular/common";
     }
 
     .wrap:hover {
-      background-color: #1a1c1e;
-      color: #99a4d0;
+      /*background-color: #1a1c1e;*/
+      /*color: #99a4d0;*/
     }
 
     .selected {
