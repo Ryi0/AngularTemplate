@@ -7,6 +7,8 @@ $lightSecondary-color: #e4eeec;
 
 $darkPrimary-color: #42445A;
 $darkSecondary-color: #17202A;
+
+
 $darkBackground-color: #252628;
 $lightBackground-color: #fffdf3;
 $darkColor-color:$lightBackground-color;
@@ -33,6 +35,9 @@ $breakpoint-desktop: 1024px;
 //$chosenFont-color:$lightColor-color;
 
 
+
+//effects
+$base-blur: 10px;
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Responsive Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
 
 @mixin respond-to($media) {
@@ -52,7 +57,7 @@ $breakpoint-desktop: 1024px;
 }
 
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/<  Common Mixins  >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
-@mixin bordered-container($border-color: $chosenPrimary-color, $title-color: $chosenSecondary-color, $bg-color: transparent) {
+@mixin bordered-container($border-color: $chosenPrimary-color, $title-color: $tertiary, $bg-color: transparent) {
   position: relative;
   padding: $spacing-medium;
   border: 2px solid $border-color;
@@ -61,14 +66,140 @@ $breakpoint-desktop: 1024px;
   &:before {
     content: attr(data-title);
     position: absolute;
+    z-index: 1;
     top: -0.5em;
     left: $spacing-small;
     background: $chosenBackgroundColor;
-    color: $border-color;
+    color: $title-color;
     padding: 0 $spacing-small;
   }
 }
 
+@mixin gradBlur($inset:-10vh){
+  $NavHeight:10vh;
+  $HrHeight:1vh;
+  &::before {
+    display: block;
+    // background: rgba(0, 0, 0, 0.34);
+    content: '';
+    position: absolute;
+    //z-index: -100;
+    inset: $inset;
+    //mask:   linear-gradient(to top, transparent 0%, black 25% 75%, transparent 100%),linear-gradient(to left, transparent 0%, black 25% 75%, transparent 100%);
+    mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 15%, transparent 100%);
+    backdrop-filter: blur($base-blur+10) ;
+  }
+}
+@mixin testBlurSecond(){
+  &::after {
+    $clipSpace: .3em;
+    filter: initial;
+    $calculatedClipSpace: calc(100% - $clipSpace);
+    content: '';
+    // background-color: rgba(0, 0, 0, 0.1);
+    //background-color: crimson;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur($base-blur + 10) saturate(1) brightness(1.5) contrast(1.75);
+    clip-path: polygon(
+        evenodd,
+        0% 0%,
+        100% 0%,
+        100% 100%,
+        0% 100%,
+        0% 0%,
+        $clipSpace $clipSpace,
+        $calculatedClipSpace $clipSpace,
+        $calculatedClipSpace $calculatedClipSpace,
+        $clipSpace $calculatedClipSpace, $clipSpace $clipSpace
+    );
+
+  }
+}
+
+@mixin testBlur($clipSpace: .75em){ //Custom outline
+  &:before{
+
+    background: rgba(0, 0, 0, 0.34);
+    mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, transparent 100%);
+    display: block;
+    filter: initial;
+    $calculatedClipSpace: calc(100% - $clipSpace);
+    content: '';
+    //background-color: rgba(255,255,255,0.1);
+    //background-color: crimson;
+    //position: fixed;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur($base-blur + 10);
+    clip-path: polygon(
+        evenodd,
+        0% 0%,
+        100% 0%,
+        100% 100%,
+        0% 100%,
+        0% 0%,
+        $clipSpace $clipSpace,
+        $calculatedClipSpace $clipSpace,
+        $calculatedClipSpace $calculatedClipSpace,
+        $clipSpace $calculatedClipSpace, $clipSpace $clipSpace
+    );
+  }
+}
+
+@mixin backdropBlur() {
+  &:before {
+    background: rgba(0, 0, 0, 0.34);
+    mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, transparent 100%);
+    display: block;
+    filter: initial;
+    content: '';
+    //background-color: rgba(255,255,255,0.1);
+    //background-color: crimson;
+    //position: fixed;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur($base-blur + 10) saturate(1.25) brightness(1.55);
+    //border: 8px solid $chosenBackgroundColor;
+    padding: 0;
+  }
+}
+
+/**
+  This is not styled
+ */
+@mixin clipPathBorder($clipSpace: .75em){
+  &:before{
+
+    background: rgba(0, 0, 0, 0.34);
+    display: block;
+    $calculatedClipSpace: calc(100% - $clipSpace);
+    content: '';
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    clip-path: polygon(
+        evenodd,
+        0% 0%,
+        100% 0%,
+        100% 100%,
+        0% 100%,
+        0% 0%,
+        $clipSpace $clipSpace,
+        $calculatedClipSpace $clipSpace,
+        $calculatedClipSpace $calculatedClipSpace,
+        $clipSpace $calculatedClipSpace, $clipSpace $clipSpace
+    );
+  }
+}
+
+@mixin blur-effect() {
+  filter: blur(10px);
+  //-webkit-backdrop-filter: blur(10px); /* For Safari */
+}
 @mixin button-styles($bg-color, $text-color) {
   background-color: $bg-color;
   color: $text-color;
@@ -101,7 +232,8 @@ $breakpoint-desktop: 1024px;
     background-color: $hover-bg-color;
     color: $hover-txt-color;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
-    transform: translateY(-2px) scale(1.09); // gives a lifting effect
+    //transform: scale(1); // gives a lifting effect
+    //transform: rotate(0);
   }
 
   &:active {
@@ -152,6 +284,7 @@ $chosenFont-color: if($is-dark-theme, $darkColor-color, $lightColor-color);
 
 $vibrantPrimary:saturate($chosenPrimary-color, 35);
 $vibrantPrimary:lighten($vibrantPrimary, 20);
+$tertiary: mix($vibrantPrimary, $chosenFont-color, 30%);
 //====================================================================<Base styles>=================================================================
 
 // Reset
@@ -209,8 +342,10 @@ html{
 //\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/< Global classes for divs >\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/\!/
 
 .custBordered{
-  margin-top: 1vh;
+  margin-top: 0;
+  //margin-top: 1vh; //might need at one point
   @include bordered-container;
+
 }
 
 // 5 different div container sizes
@@ -291,5 +426,9 @@ button:hover{
   flex-direction: column;
   align-items: start;
 }
+
+
+
+
 //--------------------------------------------------------------------<    >-----------------------------------------------------------------
 

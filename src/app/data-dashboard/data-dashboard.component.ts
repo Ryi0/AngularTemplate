@@ -29,9 +29,9 @@ import {askConfirmation} from "@angular/cli/src/utilities/prompt";
     <button (click)="logDbData()">Load Server Data</button>
     <button (click)="StoreDataLocally()">Cache Server Data</button>
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
-      <div appBordered myTitle="Database" class="divSize5 heightMax">
+      <div id="db" appBordered myTitle="Database" class="divSize5 heightMax">
+        <div class="dbBorder">
         <div class="gridContainer">
-
           <div class="dataGrid">
             <ng-container *ngFor="let obj of ToolsService.Db.displayData index as humanReadableObjectId">
               <div [id]="'dbDivItemId'+obj.id" (click)="DbItemClickHandler(obj)" class="objTile">
@@ -44,6 +44,7 @@ import {askConfirmation} from "@angular/cli/src/utilities/prompt";
               </div>
             </ng-container>
           </div>
+        </div>
         </div>
       </div>
       <div class="divSize1 flex" style="flex-direction: column; width: 100%; height: 15% " >
