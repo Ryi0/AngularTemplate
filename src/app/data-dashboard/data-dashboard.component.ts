@@ -29,7 +29,7 @@ import {askConfirmation} from "@angular/cli/src/utilities/prompt";
     <button (click)="logDbData()">Load Server Data</button>
     <button (click)="StoreDataLocally()">Cache Server Data</button>
     <div appBordered [myTitle]="name" class="divSize5 flex AlignStartRev">
-      <div id="db" appBordered myTitle="Database" class="divSize5 heightMax">
+      <div id="db" appBordered myTitle="Database" class="divSize5 heightMax ">
         <div class="dbBorder">
         <div class="gridContainer">
           <div class="dataGrid">

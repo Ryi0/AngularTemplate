@@ -25,8 +25,8 @@ import {Engine} from "../../data/engine";
         <input id="attribute" type="text" formControlName="attribute">
       </div>
 
-        <div [ngClass]="{'invisible':!(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)}" appBordered myTitle="Rpm" style="padding:5px">
-          <input [disabled]="(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)" id="rpm" type="text" formControlName="rpm">
+        <div  [ngClass]="{'invisible':!(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)}" appBordered myTitle="Rpm" style="padding:5px">
+          <input [attr.readonly]="!(type === ObjectTypes.ElectricEngine || type === ObjectTypes.GasEngine)?true:null" id="rpm" type="text" formControlName="rpm">
         </div>
 
       <button type="submit">Submit</button>
@@ -41,8 +41,9 @@ import {Engine} from "../../data/engine";
       transition: 200ms;
     }
     .invisible{
-
       opacity: 0;
+      tab-index: -1;
+      pointer-events: none;
     }
   `
 })
