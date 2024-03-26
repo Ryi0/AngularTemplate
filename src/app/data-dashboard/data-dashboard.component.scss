@@ -9,12 +9,20 @@
 
 .typesGrid {
   //@include responsive-grid(5em, 10em, auto, 0); // If you don't pass any argument, it will use the default values
+  position: relative;
+  @include backdropBlur();
+  @include clipPathBorder(.2em);
+  &:before{
+    inset: unset;
+    z-index: 5;
+    backdrop-filter: blur(15px) brightness(2.5) contrast(1.15) saturate(1.2);
+  }
   display: grid;
   grid-template-columns: 1fr 1fr;
   //grid-template-rows: fit-content(100%);
   height: 100%;
   width: 100%;
-  border: 4px solid transparent;
+  //border: 4px solid transparent;
   //background: linear-gradient(180deg,  $chosenBackgroundColor 0%, $chosenPrimary-color 100%);
   //background: linear-gradient(180deg,  $chosenBackgroundColor 0%, $chosenPrimary-color 100%);
   //background-clip: border-box;
