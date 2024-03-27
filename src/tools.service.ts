@@ -44,11 +44,56 @@ export class ToolsService {
     return this.ToolKitList.find(tool =>tool.toolName===name);
 
   }
+  static GetAllPropertiesFromDb (){
+    const keys:string[] = []
+    this.Db.ObjList.forEach((obj:InterfaceObject) => {
 
-  static CountByProp(propName:string){
-
+    })
+    return keys;
   }
 
+
+  private static hasProperty(propName: string) {
+    let isPropPresent: boolean = false;
+    const presenceFlags: boolean[] = []
+    this.Db.ObjList.forEach((obj) => {
+      const objProps = Object.keys(obj);
+      isPropPresent = objProps.includes(propName);
+      presenceFlags.push(isPropPresent);
+      // console.log(`'propPresent ? ${isPropPresent}`)
+    });
+    if (presenceFlags.includes(false)) {
+      console.log(`The prop ${propName} is not present in all objects`);
+      return false;
+    } else return true;
+  }
+
+  static CountByProp(propName:string ,inputValue:any){
+    console.log(this.hasProperty(propName))
+    if (!this.hasProperty(propName)){
+      return;
+    }
+    // console.log("START")
+    const keys:string[] = [];
+    this.Db.ObjList.forEach(obj => {keys.push(Object.keys(obj).find((key:string) => key === propName)!)
+    });
+    const KvPairList:any[][][] = [];
+    this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const propCount = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
+
+    const propCount = KvPairList.map((kvPairAsArray) => {
+      let value ;
+      kvPairAsArray.forEach(pair =>{
+        if (pair[0] === propName) {
+          value = pair[1];
+          console.log(value)
+          return value;
+        }
+      })
+      return value
+    });
+    console.log(propCount)
+    // const propCount = this.Db.ObjList.map((obj:InterfaceObject) => {})
+  }
   static NameCount(){
 
   }

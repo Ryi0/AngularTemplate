@@ -1,4 +1,5 @@
 import {ToolingTemplate} from "../tools/tool-dir/tooling-template";
+import {ToolsService} from "../../tools.service";
 
 export class AttributeMethod extends ToolingTemplate {
   override toolName: string;
@@ -30,6 +31,7 @@ export class AttributeMethod extends ToolingTemplate {
       this.addToAttributesCount(Attribute)
     }
     this.calculateRealCount(this.attributeCountMap)
+    ToolsService.CountByProp("type","")
     console.log(this.attributeCountMap);
     console.log(`${this.toolName} initialized`);
   }
