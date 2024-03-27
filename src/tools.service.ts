@@ -68,7 +68,7 @@ export class ToolsService {
     } else return true;
   }
 
-  static CountByProp(propName:string ,inputValue:any){
+  static GetArrayOfProperty(propName:string , inputValue:any){
     console.log(this.hasProperty(propName))
     if (!this.hasProperty(propName)){
       return;
@@ -78,21 +78,26 @@ export class ToolsService {
     this.Db.ObjList.forEach(obj => {keys.push(Object.keys(obj).find((key:string) => key === propName)!)
     });
     const KvPairList:any[][][] = [];
-    this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const propCount = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
+    this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
 
-    const propCount = KvPairList.map((kvPairAsArray) => {
-      let value ;
+    const arrayOfValuesForPropname = KvPairList.map((kvPairAsArray) => {
+      let value;
       kvPairAsArray.forEach(pair =>{
         if (pair[0] === propName) {
-          value = pair[1];
-          console.log(value)
-          return value;
+          if (pair[1] === inputValue) {
+            value = pair[1];
+
+          }
         }
       })
-      return value
+      console.log(value)
+      if (value!=undefined){
+        return value
+      }
+      else return false;
     });
-    console.log(propCount)
-    // const propCount = this.Db.ObjList.map((obj:InterfaceObject) => {})
+    console.log(arrayOfValuesForPropname)
+    // const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {})
   }
   static NameCount(){
 
