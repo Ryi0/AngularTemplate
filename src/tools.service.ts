@@ -73,13 +73,10 @@ export class ToolsService {
     if (!this.hasProperty(propName)){
       return;
     }
-    // console.log("START")
-    const keys:string[] = [];
-    this.Db.ObjList.forEach(obj => {keys.push(Object.keys(obj).find((key:string) => key === propName)!)
-    });
+
     const KvPairList:any[][][] = [];
     this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
-
+    console.log(KvPairList)
     const arrayOfValuesForPropname = KvPairList.map((kvPairAsArray) => {
       let value;
       kvPairAsArray.forEach(pair =>{
@@ -95,8 +92,9 @@ export class ToolsService {
         return value
       }
       else return false;
-    });
+    }).filter(prop => prop);
     console.log(arrayOfValuesForPropname)
+
     // const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {})
   }
   static NameCount(){
