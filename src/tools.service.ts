@@ -81,9 +81,11 @@ export class ToolsService {
       let value;
       kvPairAsArray.forEach(pair =>{
         if (pair[0] === propName) {
-          if (pair[1] === inputValue) {
+          if (inputValue===undefined){
             value = pair[1];
-
+          }
+          else if (pair[1] === inputValue) {
+            value = pair[1];
           }
         }
       })
@@ -93,12 +95,17 @@ export class ToolsService {
       }
       else return false;
     }).filter(prop => prop);
-    console.log(arrayOfValuesForPropname)
 
+    console.log(arrayOfValuesForPropname)
+    return arrayOfValuesForPropname;
     // const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {})
   }
-  static NameCount(){
-
+  static CountByName(name:string){
+    const tmpRet = this.GetArrayOfProperty("name", name)?.length;
+    if (tmpRet===undefined){
+      return 0;
+    }
+    else return tmpRet;
   }
 
 

@@ -20,6 +20,14 @@ import {NgForOf} from "@angular/common";
               {{pair}}
             </div>
         </div>
+
+      <div class=" flex AlignStartReg">
+        <h2>Count by names : </h2>
+        <div *ngFor="let pair of AttributeMapToKVPair()">
+          {{pair}}
+        </div>
+      </div>
+
         </div>
   `,
   styleUrl: './first-tool.component.scss'
