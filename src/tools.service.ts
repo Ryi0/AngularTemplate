@@ -68,16 +68,15 @@ export class ToolsService {
     } else return true;
   }
 
-  static GetArrayOfProperty(propName:string , inputValue:any){
+  static GetArrayOfProperty(propName:string , inputValue:any|undefined, List?:[]){
     console.log(this.hasProperty(propName))
     if (!this.hasProperty(propName)){
       return;
     }
-
     const KvPairList:any[][][] = [];
     this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
     console.log(KvPairList)
-    const arrayOfValuesForPropname = KvPairList.map((kvPairAsArray) => {
+    const arrayOfValuesForPropname: any[] = KvPairList.map((kvPairAsArray) => {
       let value;
       kvPairAsArray.forEach(pair =>{
         if (pair[0] === propName) {
@@ -94,7 +93,7 @@ export class ToolsService {
         return value
       }
       else return false;
-    }).filter(prop => prop);
+    }).filter((prop: any) => prop);
 
     console.log(arrayOfValuesForPropname)
     return arrayOfValuesForPropname;
@@ -108,7 +107,27 @@ export class ToolsService {
     else return tmpRet;
   }
 
+  static GroupCount(property:string){
+    const rawPropList: undefined | any[] = this.GetArrayOfProperty(property, undefined)
+    if (rawPropList==undefined){
+      return;
+    }
+    const countPerGroup = new Map<string, number>();
+    const GroupsMap = new Map<string, any[]>();
+    for (const prop of rawPropList) {
+      const mapField = GroupsMap.get(prop);
+      if (mapField===undefined){
+        GroupsMap.set(prop, [prop])
+      }
+      else mapField.push(prop);
+      countPerGroup.set(prop, mapField?.length===undefined?1:mapField.length);
+    }
+    console.log(rawPropList);
+    console.log(GroupsMap)
+    console.log(countPerGroup)
 
+
+  }
 
 
 

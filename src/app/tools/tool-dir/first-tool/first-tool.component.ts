@@ -22,10 +22,7 @@ import {NgForOf} from "@angular/common";
         </div>
 
       <div class=" flex AlignStartReg">
-        <h2>Count by names : </h2>
-        <div *ngFor="let pair of AttributeMapToKVPair()">
-          {{pair}}
-        </div>
+        <h2>Count by names : {{this.allNames}} </h2>
       </div>
 
         </div>
@@ -34,13 +31,15 @@ import {NgForOf} from "@angular/common";
 })
 export class FirstToolComponent implements OnInit{
   ngOnInit(): void {
-  this.test();
+  this.Initializer();
   }
   ToolName = "FirstToolComponent";
   attrTool = ToolsService.AttributeToolFactory(this.ToolName)
-  test(){
+  Initializer(){
     this.attrTool.mainTool();
     console.log(this.attrTool.ListOfAttributes);
+    this.setAllNames();
+    this.groupBy("name")
     // console.log(this.attrTool.AllAssignedAttributes);
   }
   AttributeMapToString(){
@@ -56,6 +55,15 @@ export class FirstToolComponent implements OnInit{
       kvPairs.push(`Amount of ${key} items : ${value}`);
     });
     return kvPairs;
+  }
+  allNames = "";
+  setAllNames(){
+   ToolsService.GetArrayOfProperty("name", undefined)?.forEach(prop =>{
+     this.allNames += prop;
+   })
+  }
+  groupBy(property:string){
+    ToolsService.GroupCount(property)
   }
 }
 
