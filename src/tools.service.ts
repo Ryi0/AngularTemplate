@@ -125,7 +125,7 @@ export class ToolsService {
     console.log(rawPropList);
     console.log(GroupsMap)
     console.log(countPerGroup)
-
+    return countPerGroup;
 
   }
 

@@ -1,31 +1,35 @@
 import {Component, OnInit} from '@angular/core';
 import {BorderedDirective} from "../../../directives/bordered.directive";
 import {ToolsService} from "../../../../tools.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-first-tool',
   standalone: true,
   imports: [
     BorderedDirective,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   template: `
     <div appBordered [myTitle]="ToolName" class="divSize5">
       <h1>Cool tool number one</h1>
 
-        <div class=" flex AlignStartReg">
-          <h2>Count by attribute : </h2>
-            <div *ngFor="let pair of AttributeMapToKVPair()">
-              {{pair}}
-            </div>
-        </div>
-
       <div class=" flex AlignStartReg">
-        <h2>Count by names : {{this.allNames}} </h2>
+        <h2>Count by attribute : </h2>
+        <div *ngFor="let pairMessage of AttributeMapToKVPair()">
+          {{ pairMessage }}
+        </div>
       </div>
 
+      <div class=" flex AlignStartReg">
+        <h2>Count by names : </h2>
+        <div *ngFor="let pair of countMapEntries index as i">
+            {{ pair[0] }} : {{ pair[1] }}
         </div>
+      </div>
+
+    </div>
   `,
   styleUrl: './first-tool.component.scss'
 })
@@ -33,13 +37,16 @@ export class FirstToolComponent implements OnInit{
   ngOnInit(): void {
   this.Initializer();
   }
+
+  countMapEntries!: IterableIterator<[string, number]>;
+  countByTheGroup = "";
   ToolName = "FirstToolComponent";
   attrTool = ToolsService.AttributeToolFactory(this.ToolName)
   Initializer(){
     this.attrTool.mainTool();
     console.log(this.attrTool.ListOfAttributes);
-    this.setAllNames();
-    this.groupBy("name")
+    // this.setAllNames();
+    this.countMapEntries = this.groupBy("name").entries();
     // console.log(this.attrTool.AllAssignedAttributes);
   }
   AttributeMapToString(){
@@ -62,8 +69,14 @@ export class FirstToolComponent implements OnInit{
      this.allNames += prop;
    })
   }
+
   groupBy(property:string){
-    ToolsService.GroupCount(property)
+    const countMap= ToolsService.GroupCount(property);
+    if (countMap==undefined){
+    return new Map<string, number>([["status", -404]]);
+    }
+
+    return countMap ;
   }
 }
 
