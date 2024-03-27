@@ -53,24 +53,45 @@ export class ToolsService {
   }
 
 
-  private static hasProperty(propName: string) {
+  private static dbHasProperty(propName: string):{
+    typesToInclude: string[];
+    ispropPresent: boolean;
+    typesToExclude: string[]
+  } {
     let isPropPresent: boolean = false;
-    const presenceFlags: boolean[] = []
+    const typesToInclude: string[] = [];
+    const typesToExclude: string[] = []
+    const presenceFlags: boolean[] = [];
+    const objectAnswer = {ispropPresent:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
     this.Db.ObjList.forEach((obj) => {
       const objProps = Object.keys(obj);
       isPropPresent = objProps.includes(propName);
+      if(obj.type!=undefined) {
+        isPropPresent ? !typesToInclude.includes(obj.type) ? typesToInclude.push(obj.type) : null :!typesToExclude.includes(obj.type) ? typesToExclude.push(obj.type):null
+      }
       presenceFlags.push(isPropPresent);
-      // console.log(`'propPresent ? ${isPropPresent}`)
     });
+    console.log(`Included types : ${typesToInclude}`);
+    console.log(`Excluded types : ${typesToExclude}`);
     if (presenceFlags.includes(false)) {
+      isPropPresent = false;
       console.log(`The prop ${propName} is not present in all objects`);
-      return false;
-    } else return true;
+    }
+    return objectAnswer;
+    // return [objectAnswer.ispropPresent, objectAnswer.typesToInclude, objectAnswer.typesToExclude ];
   }
 
+
+  /**
+   * Retrieves an array of property values from the database objects based on the specified property name and optional input value.
+   *
+   * @param {string} propName - The name of the property.
+   * @param {any|undefined} inputValue - (Optional) The input value used to filter the property values. Defaults to undefined.
+   * @param {Array} [List] - (Optional) The list of objects to search for the property values. Defaults to the internal object list.
+   */
   static GetArrayOfProperty(propName:string , inputValue:any|undefined, List?:[]){
-    console.log(this.hasProperty(propName))
-    if (!this.hasProperty(propName)){
+    console.log(this.dbHasProperty(propName))
+    if (!this.dbHasProperty(propName).ispropPresent){
       return;
     }
     const KvPairList:any[][][] = [];
@@ -79,12 +100,13 @@ export class ToolsService {
     const arrayOfValuesForPropname: any[] = KvPairList.map((kvPairAsArray) => {
       let value;
       kvPairAsArray.forEach(pair =>{
+        const tmpVal = pair[1];
         if (pair[0] === propName) {
           if (inputValue===undefined){
-            value = pair[1];
+            value = tmpVal;
           }
-          else if (pair[1] === inputValue) {
-            value = pair[1];
+          else if (tmpVal === inputValue) {
+            value = tmpVal;
           }
         }
       })

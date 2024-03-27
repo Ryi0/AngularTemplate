@@ -46,7 +46,7 @@ export class FirstToolComponent implements OnInit{
     this.attrTool.mainTool();
     console.log(this.attrTool.ListOfAttributes);
     // this.setAllNames();
-    this.countMapEntries = this.groupBy("name").entries();
+    this.countMapEntries = this.groupBy("_maxRpm").entries();
     // console.log(this.attrTool.AllAssignedAttributes);
   }
   AttributeMapToString(){
@@ -65,7 +65,7 @@ export class FirstToolComponent implements OnInit{
   }
   allNames = "";
   setAllNames(){
-   ToolsService.GetArrayOfProperty("name", undefined)?.forEach(prop =>{
+   ToolsService.GetArrayOfProperty("name", undefined)?.forEach((prop: string) =>{
      this.allNames += prop;
    })
   }
