@@ -14,6 +14,10 @@ import {AttributeMethod} from "./app/toolsClasses/attribute-method";
 })
 export class ToolsService {
   static Db = new Database([]);
+  static AttributeToolFactory = (name:string)=> new AttributeMethod(name);
+  static ToolKitList = new Array<ToolingTemplate>;
+  constructor() {
+  }
   static getTypeOfObject = (obj: InterfaceObject): any => {
 
     return Object.getPrototypeOf(obj).constructor.name;
@@ -41,10 +45,17 @@ export class ToolsService {
 
   }
 
-  constructor() {
+  static CountByProp(propName:string){
+
   }
-  static AttributeToolFactory = (name:string)=> new AttributeMethod(name);
-  static ToolKitList = new Array<ToolingTemplate>;
+
+  static NameCount(){
+
+  }
+
+
+
+
 
 }
 

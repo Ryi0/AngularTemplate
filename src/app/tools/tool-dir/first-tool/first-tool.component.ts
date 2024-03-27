@@ -14,7 +14,7 @@ import {NgForOf} from "@angular/common";
     <div appBordered [myTitle]="ToolName" class="divSize5">
       <h1>Cool tool number one</h1>
 
-        <div  class=" flex AlignStartReg">
+        <div class=" flex AlignStartReg">
           <h2>Count by attribute : </h2>
             <div *ngFor="let pair of AttributeMapToKVPair()">
               {{pair}}
