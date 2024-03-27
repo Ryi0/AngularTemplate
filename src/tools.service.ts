@@ -55,14 +55,14 @@ export class ToolsService {
 
   private static dbHasProperty(propName: string):{
     typesToInclude: string[];
-    ispropPresent: boolean;
+    isPropPresentEverywhere: boolean;
     typesToExclude: string[]
   } {
     let isPropPresent: boolean = false;
     const typesToInclude: string[] = [];
     const typesToExclude: string[] = []
     const presenceFlags: boolean[] = [];
-    const objectAnswer = {ispropPresent:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
+    const objectAnswer = {isPropPresentEverywhere:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
     this.Db.ObjList.forEach((obj) => {
       const objProps = Object.keys(obj);
       isPropPresent = objProps.includes(propName);
@@ -90,12 +90,21 @@ export class ToolsService {
    * @param {Array} [List] - (Optional) The list of objects to search for the property values. Defaults to the internal object list.
    */
   static GetArrayOfProperty(propName:string , inputValue:any|undefined, List?:[]){
-    console.log(this.dbHasProperty(propName))
-    if (!this.dbHasProperty(propName).ispropPresent){
-      return;
-    }
+    console.log(this.dbHasProperty(propName));
+    const dbInfo = this.dbHasProperty(propName);
+    const typesWithProperty = dbInfo.typesToInclude;
+    const typesWithoutProperty = dbInfo.typesToExclude;
+    let listToUse = [];
+    if (!dbInfo.isPropPresentEverywhere&&typesWithProperty.length<=0){
+        return;
+      }
+
+    listToUse = (typesWithoutProperty.length<=0)? this.Db.ObjList:this.Db.ObjList.filter(obj =>{
+      return typesWithProperty.includes(<string>obj.type);
+    })
     const KvPairList:any[][][] = [];
-    this.Db.ObjList.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
+
+    listToUse.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
     console.log(KvPairList)
     const arrayOfValuesForPropname: any[] = KvPairList.map((kvPairAsArray) => {
       let value;
