@@ -51,7 +51,7 @@ export class AttributeMethod extends ToolingTemplate {
    */
   private calculateRealCount(KVAttributesMap: Map<string, number>): void {
     const attrMap = KVAttributesMap;
-    for (const key of attrMap.keys()) { //this makes it human readable kinda
+    for (const key of attrMap.keys()) { //this makes it human-readable kinda
       attrMap.set(key, attrMap.get(key)! + 1);
     }
     const arrayFromMap = Array.from(attrMap);
