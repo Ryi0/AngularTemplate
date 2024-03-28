@@ -53,7 +53,7 @@ export class ToolsService {
   }
 
 
-  private static dbHasProperty(propName: string, List?:InterfaceObject[]):{
+  private static getDbInfo(propName: string, List?:InterfaceObject[]):{
     //Region object return definition
     isPropPresentEverywhere: boolean;
     typesToInclude: string[];
@@ -65,7 +65,7 @@ export class ToolsService {
     const typesToInclude: string[] = [];
     const typesToExclude: string[] = []
     const presenceFlags: boolean[] = [];
-    const objectAnswer =
+    const dbInfo =
       {isPropPresentEverywhere:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
     listToUse.forEach((obj) => {
       const objProps = Object.keys(obj);
@@ -93,7 +93,7 @@ export class ToolsService {
       isPropPresent = false;
       console.log(`The prop ${propName} is not present in all objects`);
     }
-    return objectAnswer;
+    return dbInfo;
   }
 
 
@@ -105,12 +105,14 @@ export class ToolsService {
    * @param {Array} [List] - (Optional) The list of objects to search for the property values. Defaults to the internal object list.
    */
   static GetArrayOfPropertyValues(propName:string , inputValue:string|undefined, List?:[]){
-    console.log(this.dbHasProperty(propName), List);
-    const dbInfo = this.dbHasProperty(propName);
+    console.log(this.getDbInfo(propName), List);
+    const dbInfo = this.getDbInfo(propName);
     const typesWithProperty = dbInfo.typesToInclude;
     const typesWithoutProperty = dbInfo.typesToExclude;
-    let listToUse = [];
-    if (!dbInfo.isPropPresentEverywhere&&typesWithProperty.length<=0){
+    const propertyPresentNowhere = !dbInfo.isPropPresentEverywhere&&typesWithProperty.length<=0;
+    let listToUse:InterfaceObject[] = [];
+    const ObjectsAsArray:any[][][] = [];
+    if (propertyPresentNowhere){
       console.warn("no objects with the property")
         return;
       }
@@ -118,26 +120,28 @@ export class ToolsService {
     listToUse = (typesWithoutProperty.length<=0)? this.Db.ObjList:this.Db.ObjList.filter(obj =>{
       return typesWithProperty.includes(<string>obj.type);
     })
-    const ObjectsAsArray:any[][][] = [];
 
     listToUse.forEach(obj => ObjectsAsArray.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
     console.log(ObjectsAsArray)
-    const arrayOfValuesForPropname: any[] = ObjectsAsArray.map((kvPairArray) => {
-      let value;
+    const _dirtyArrayOfValuesForPropName: (false | string)[] = ObjectsAsArray.map((kvPairArray):false|string => {
+      let value:string|undefined;
       kvPairArray.forEach(kvPair =>{
         const tmpVal = kvPair[1];
         if (kvPair[0] === propName) {
-          if (inputValue===undefined||tmpVal==inputValue){
+          if (inputValue===undefined||inputValue==tmpVal){
+            //double equal to assure that number values in property is truthy compared but triple for undefined because "fake" undefined need to also work. ie : "Price":"undefined" could be a value.
             value = tmpVal;
           }
         }
       })
       console.log(value)
-      if (value!=undefined){
+      if (value!==undefined){
         return value
       }
       else return false;
-    }).filter((prop: any) => prop);
+    })
+    const isString = (value: any): value is string => typeof value === 'string';
+    const arrayOfValuesForPropname: string[] = _dirtyArrayOfValuesForPropName.filter(isString);
 
     console.log(arrayOfValuesForPropname)
     return arrayOfValuesForPropname;
@@ -157,13 +161,14 @@ export class ToolsService {
     }
     const countPerGroup = new Map<string, number>();
     const GroupsMap = new Map<string, any[]>();
-    for (const prop of rawPropList) {
-      const mapField = GroupsMap.get(prop);
+    for (const value of rawPropList) {
+      const mapField = GroupsMap.get(value);
       if (mapField===undefined){
-        GroupsMap.set(prop, [prop])
+        GroupsMap.set(value, [value])
       }
-      else mapField.push(prop);
-      countPerGroup.set(prop, mapField?.length===undefined?1:mapField.length);
+      else mapField.push(value);
+      countPerGroup.set(value, mapField?.length===undefined?1:mapField.length);
+      console.log(mapField)
     }
     console.log(rawPropList);
     console.log(GroupsMap)

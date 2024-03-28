@@ -45,7 +45,7 @@ export class FirstToolComponent implements OnInit{
   Initializer(){
     this.attrTool.mainTool();
     console.log(this.attrTool.ListOfAttributes);
-    this.countMapEntries = this.groupBy("name").entries();
+    this.countMapEntries = this.groupByCount("name").entries();
     console.log(this.allNames)
   }
   AttributeMapToString(){
@@ -64,7 +64,7 @@ export class FirstToolComponent implements OnInit{
   }
   allNames = "";
 
-  groupBy(property:string){
+  groupByCount(property:string){
     const countMap= ToolsService.GroupCount(property);
     if (countMap==undefined){
     return new Map<string, number>([["status", -404]]);
