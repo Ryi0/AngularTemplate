@@ -103,7 +103,8 @@ export class AttributeMethod extends ToolingTemplate {
    * @returns {number} - The index of the last occurrence of the attribute, or 0 if the attribute is not found.
    */
   private getLastAttributeIndex(attribute: string): number {
-    const sortedList = this.AllAssignedAttributes.sort();
+    this.AllAssignedAttributes.sort((a: string, b: string) => a.localeCompare(b));
+    const sortedList = this.AllAssignedAttributes;
     // console.log(sortedList);
     let count = 0;
     for (let i = 0; i < this.AllAssignedAttributes.length; i++) {
