@@ -40,12 +40,12 @@ export class FirstToolComponent implements OnInit{
 
   countMapEntries!: IterableIterator<[string, number]>;
   countByTheGroup = "";
-  ToolName = "FirstToolComponent";
+  ToolName = "Db Stats";
   attrTool = ToolsService.AttributeToolFactory(this.ToolName)
   Initializer(){
     this.attrTool.mainTool();
     console.log(this.attrTool.ListOfAttributes);
-    this.countMapEntries = this.groupByCount("name").entries();
+    this.countMapEntries = this.groupByCount("_maxRpm").entries();
     console.log(this.allNames)
   }
   AttributeMapToString(){
@@ -65,11 +65,11 @@ export class FirstToolComponent implements OnInit{
   allNames = "";
 
   groupByCount(property:string){
-    const countMap= ToolsService.GroupCount(property);
+    const countMap= ToolsService.GroupCountByProperty(property);
     if (countMap==undefined){
     return new Map<string, number>([["status", -404]]);
     }
-
+    console.log(countMap)
     return countMap ;
   }
 }

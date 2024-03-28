@@ -63,7 +63,7 @@ export class ToolsService {
     let listToUse = List ?? this.Db.ObjList;
     let isPropPresent: boolean = false;
     const typesToInclude: string[] = [];
-    const typesToExclude: string[] = []
+    const typesToExclude: string[] = [];
     const presenceFlags: boolean[] = [];
     const dbInfo =
       {isPropPresentEverywhere:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
@@ -104,14 +104,18 @@ export class ToolsService {
    * @param {any|undefined} inputValue - (Optional) The input value used to filter the property values. Defaults to undefined.
    * @param {Array} [List] - (Optional) The list of objects to search for the property values. Defaults to the internal object list.
    */
-  static GetArrayOfPropertyValues(propName:string , inputValue:string|undefined, List?:[]){
+  static getPassingValueAndObjectRefArray(propName:string , inputValue:string|undefined, List?:[]): {
+    refObject: InterfaceObject;
+    propNameValue: string
+  }[]|undefined {
     console.log(this.getDbInfo(propName), List);
     const dbInfo = this.getDbInfo(propName);
     const typesWithProperty = dbInfo.typesToInclude;
     const typesWithoutProperty = dbInfo.typesToExclude;
     const propertyPresentNowhere = !dbInfo.isPropPresentEverywhere&&typesWithProperty.length<=0;
+    const dataInfoWithRefs = {arrayOfValues:Array(), objectsRef:[]}
+    const listOfValueAndRefKVpairObjects: { refObject: InterfaceObject; propNameValue: string }[] = []
     let listToUse:InterfaceObject[] = [];
-    const ObjectsAsArray:any[][][] = [];
     if (propertyPresentNowhere){
       console.warn("no objects with the property")
         return;
@@ -120,12 +124,11 @@ export class ToolsService {
     listToUse = (typesWithoutProperty.length<=0)? this.Db.ObjList:this.Db.ObjList.filter(obj =>{
       return typesWithProperty.includes(<string>obj.type);
     })
-
-    listToUse.forEach(obj => ObjectsAsArray.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
-    console.log(ObjectsAsArray)
-    const _dirtyArrayOfValuesForPropName: (false | string)[] = ObjectsAsArray.map((kvPairArray):false|string => {
+    console.log(listToUse);
+    const _dirtyArrayOfValuesForPropName: (undefined | string)[] = listToUse.map((object):undefined|string => {
       let value:string|undefined;
-      kvPairArray.forEach(kvPair =>{
+      const objectsKvPairs = Object.entries(object)
+      objectsKvPairs.forEach(kvPair =>{
         const tmpVal = kvPair[1];
         if (kvPair[0] === propName) {
           if (inputValue===undefined||inputValue==tmpVal){
@@ -136,41 +139,46 @@ export class ToolsService {
       })
       console.log(value)
       if (value!==undefined){
+        listOfValueAndRefKVpairObjects.push( {propNameValue: value, refObject:object});
         return value
       }
-      else return false;
+      else return undefined;
     })
-    const isString = (value: any): value is string => typeof value === 'string';
-    const arrayOfValuesForPropname: string[] = _dirtyArrayOfValuesForPropName.filter(isString);
-
+    const isNotUndefined = (value: any): value is string => typeof value !== "undefined" ;
+    _dirtyArrayOfValuesForPropName.forEach((o)=>{
+      console.log(isNotUndefined(o))
+    })
+    const arrayOfValuesForPropname: string[] = _dirtyArrayOfValuesForPropName.filter(isNotUndefined);
+    dataInfoWithRefs.arrayOfValues = arrayOfValuesForPropname
     console.log(arrayOfValuesForPropname)
-    return arrayOfValuesForPropname;
+    console.log(listOfValueAndRefKVpairObjects)
+    return listOfValueAndRefKVpairObjects;
   }
   static CountByName(name:string){
-    const tmpRet = this.GetArrayOfPropertyValues("name", name)?.length;
+    const tmpRet = this.getPassingValueAndObjectRefArray("name", name)?.length;
     if (tmpRet===undefined){
       return 0;
     }
     else return tmpRet;
   }
 
-  static GroupCount(property:string){
-    const rawPropList: undefined | any[] = this.GetArrayOfPropertyValues(property, undefined)
-    if (rawPropList==undefined){
+  static GroupCountByProperty(property:string){
+    const rawValueAndRefsList: undefined | { refObject: InterfaceObject; propNameValue: string }[] = this.getPassingValueAndObjectRefArray(property, undefined)
+    if (rawValueAndRefsList==undefined){
       return;
     }
     const countPerGroup = new Map<string, number>();
     const GroupsMap = new Map<string, any[]>();
-    for (const value of rawPropList) {
-      const mapField = GroupsMap.get(value);
-      if (mapField===undefined){
-        GroupsMap.set(value, [value])
+    for (const obj of rawValueAndRefsList) { //change obj to obj
+      const fieldsMap = GroupsMap.get(obj.propNameValue);
+      if (fieldsMap===undefined){
+         GroupsMap.set(obj.propNameValue, [obj.refObject])
       }
-      else mapField.push(value);
-      countPerGroup.set(value, mapField?.length===undefined?1:mapField.length);
-      console.log(mapField)
+      else fieldsMap.push(obj.refObject);
+      countPerGroup.set(obj.propNameValue, fieldsMap?.length===undefined?1:fieldsMap.length);
+      console.log(fieldsMap)
     }
-    console.log(rawPropList);
+    console.log(rawValueAndRefsList)
     console.log(GroupsMap)
     console.log(countPerGroup)
     return countPerGroup;
