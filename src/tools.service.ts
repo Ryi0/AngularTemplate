@@ -13,12 +13,12 @@ import {AttributeMethod} from "./app/toolsClasses/attribute-method";
   providedIn: 'root'
 })
 export class ToolsService {
-  static Db = new Database([]);
-  static AttributeToolFactory = (name:string)=> new AttributeMethod(name);
-  static ToolKitList = new Array<ToolingTemplate>;
+  static readonly Db = new Database([]);
+  static readonly AttributeToolFactory = (name:string)=> new AttributeMethod(name);
+  static readonly ToolKitList = new Array<ToolingTemplate>;
   constructor() {
   }
-  static getTypeOfObject = (obj: InterfaceObject): any => {
+  static readonly getTypeOfObject = (obj: InterfaceObject): any => {
 
     return Object.getPrototypeOf(obj).constructor.name;
   }
@@ -60,18 +60,30 @@ export class ToolsService {
     typesToExclude: string[]
     //End object definition
   } {
-    let listToUSe = List !=undefined? List:this.Db.ObjList;
+    let listToUse = List ?? this.Db.ObjList;
     let isPropPresent: boolean = false;
     const typesToInclude: string[] = [];
     const typesToExclude: string[] = []
     const presenceFlags: boolean[] = [];
-    const objectAnswer = {isPropPresentEverywhere:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
-
-    listToUSe.forEach((obj) => {
+    const objectAnswer =
+      {isPropPresentEverywhere:isPropPresent, typesToInclude:typesToInclude, typesToExclude:typesToExclude};
+    listToUse.forEach((obj) => {
       const objProps = Object.keys(obj);
       isPropPresent = objProps.includes(propName);
       if(obj.type!=undefined) {
-        isPropPresent ? !typesToInclude.includes(obj.type) ? typesToInclude.push(obj.type) : null :!typesToExclude.includes(obj.type) ? typesToExclude.push(obj.type):null
+        function addToIncludedTypes() {
+          if (typesToInclude.includes(<string>obj.type)){
+            return
+          }
+          else typesToInclude.push(<string>obj.type)
+        }
+        function addToExcludedTypes() {
+          if (typesToExclude.includes(<string>obj.type)){
+            return
+          }
+          else typesToExclude.push(<string>obj.type)
+        }
+        isPropPresent ? addToIncludedTypes():addToExcludedTypes()
       } else console.warn(`No type for obj ${obj.name} ${obj}`);
       presenceFlags.push(isPropPresent);
     });
@@ -82,7 +94,6 @@ export class ToolsService {
       console.log(`The prop ${propName} is not present in all objects`);
     }
     return objectAnswer;
-    // return [objectAnswer.ispropPresent, objectAnswer.typesToInclude, objectAnswer.typesToExclude ];
   }
 
 
@@ -93,32 +104,30 @@ export class ToolsService {
    * @param {any|undefined} inputValue - (Optional) The input value used to filter the property values. Defaults to undefined.
    * @param {Array} [List] - (Optional) The list of objects to search for the property values. Defaults to the internal object list.
    */
-  static GetArrayOfProperty(propName:string , inputValue:any|undefined, List?:[]){
-    console.log(this.dbHasProperty(propName));
+  static GetArrayOfPropertyValues(propName:string , inputValue:string|undefined, List?:[]){
+    console.log(this.dbHasProperty(propName), List);
     const dbInfo = this.dbHasProperty(propName);
     const typesWithProperty = dbInfo.typesToInclude;
     const typesWithoutProperty = dbInfo.typesToExclude;
     let listToUse = [];
     if (!dbInfo.isPropPresentEverywhere&&typesWithProperty.length<=0){
+      console.warn("no objects with the property")
         return;
       }
 
     listToUse = (typesWithoutProperty.length<=0)? this.Db.ObjList:this.Db.ObjList.filter(obj =>{
       return typesWithProperty.includes(<string>obj.type);
     })
-    const KvPairList:any[][][] = [];
+    const ObjectsAsArray:any[][][] = [];
 
-    listToUse.forEach(obj => KvPairList.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
-    console.log(KvPairList)
-    const arrayOfValuesForPropname: any[] = KvPairList.map((kvPairAsArray) => {
+    listToUse.forEach(obj => ObjectsAsArray.push(Object.entries(obj))) // 0 is key 1 is value shoulda used map     const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {return Object.entries(obj)})
+    console.log(ObjectsAsArray)
+    const arrayOfValuesForPropname: any[] = ObjectsAsArray.map((kvPairArray) => {
       let value;
-      kvPairAsArray.forEach(pair =>{
-        const tmpVal = pair[1];
-        if (pair[0] === propName) {
-          if (inputValue===undefined){
-            value = tmpVal;
-          }
-          else if (tmpVal === inputValue) {
+      kvPairArray.forEach(kvPair =>{
+        const tmpVal = kvPair[1];
+        if (kvPair[0] === propName) {
+          if (inputValue===undefined||tmpVal==inputValue){
             value = tmpVal;
           }
         }
@@ -132,10 +141,9 @@ export class ToolsService {
 
     console.log(arrayOfValuesForPropname)
     return arrayOfValuesForPropname;
-    // const arrayOfValuesForPropname = this.Db.ObjList.map((obj:InterfaceObject) => {})
   }
   static CountByName(name:string){
-    const tmpRet = this.GetArrayOfProperty("name", name)?.length;
+    const tmpRet = this.GetArrayOfPropertyValues("name", name)?.length;
     if (tmpRet===undefined){
       return 0;
     }
@@ -143,7 +151,7 @@ export class ToolsService {
   }
 
   static GroupCount(property:string){
-    const rawPropList: undefined | any[] = this.GetArrayOfProperty(property, undefined)
+    const rawPropList: undefined | any[] = this.GetArrayOfPropertyValues(property, undefined)
     if (rawPropList==undefined){
       return;
     }
@@ -161,8 +169,9 @@ export class ToolsService {
     console.log(GroupsMap)
     console.log(countPerGroup)
     return countPerGroup;
-
   }
+
+
 
 
 

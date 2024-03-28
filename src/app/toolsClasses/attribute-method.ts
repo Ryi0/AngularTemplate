@@ -31,7 +31,7 @@ export class AttributeMethod extends ToolingTemplate {
       this.addToAttributesCount(Attribute)
     }
     this.calculateRealCount(this.attributeCountMap)
-    ToolsService.GetArrayOfProperty("attribute","Wood")
+    // ToolsService.GetArrayOfProperty("attribute","Wood")
     console.log(this.attributeCountMap);
     console.log(`${this.toolName} initialized`);
   }
